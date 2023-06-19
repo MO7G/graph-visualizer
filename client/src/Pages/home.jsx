@@ -5,8 +5,8 @@ import {Graph} from '../HomeStuff/Graph.jsx';
 import {Search,Cell} from '../HomeStuff/search.js'
 
 const cellDim = 2;
-const row = 10
-const column = 10
+const row = 5
+const column = 5
 let game_mode = false;
 let game_animation = false;
 let fps = 50;
@@ -77,7 +77,7 @@ const Home = () => {
 
   const animate = (timeStamp) =>{
     if(game_mode){
-      
+
     }
   }
 

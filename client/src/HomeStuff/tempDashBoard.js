@@ -1,15 +1,51 @@
-import React, { useState,useContext, useEffect } from 'react';
+import React, { useState,useContext, useEffect, createContext } from 'react';
 import SharedValuesContext from '../SharedStuff/SharedVariables';
-
-const ControlPanel = () => {
-    const {operation,setOperation} = useContext(SharedValuesContext);
+const ControlPanel = (props) => {
+    const {operation,setOperation,x,setX,y,setY} = useContext(SharedValuesContext);
     const [selectedMode, setSelectedMode] = useState('wall');
+    const [width, setWidth] = useState('');
+    const [height, setHeight] = useState('');
 
     const handleModeChange = (mode) => {
     setSelectedMode(mode);
     setOperation(mode)
     }
-    
+
+   
+  
+    const handleWidthChange =  async (event) => {
+      setWidth(event.target.value);
+    };
+  
+    const handleHeightChange = (event) => {
+      setHeight(event.target.value);
+    };
+  
+    const handleSubmit = (event) => {
+      event.preventDefault();
+  
+      if (width.trim() === '' || height.trim() === '') {
+        alert('Please enter values in both fields.');
+        return;
+      }
+  
+      if (isNaN(width) || isNaN(height)) {
+        alert('Please enter numeric values.');
+        return;
+      }
+  
+      // Handle form submission with valid input values
+       setX(height)
+       setY(width);
+      console.log("this is the x and y " , x," ",y);
+      
+      props.MakeBoardReady();
+
+      // Clear input fields
+      setWidth('');
+      setHeight('');
+    };
+
 
     useEffect(()=>{
         setOperation(selectedMode);
@@ -74,8 +110,41 @@ const ControlPanel = () => {
               </label>
             </div>
           </div>
+
+
+          <div className='dimenstions'>
+          <form onSubmit={handleSubmit}>
+      <div>
+        <label>
+        Input 1:
+        <input
+            type="number"
+            value={width}
+            min={0}
+            max={50}
+            onChange={handleWidthChange}
+            required
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Input 2:
+          <input
+            type="number"
+            value={height}
+            min={0}
+            max={50}
+            onChange={handleHeightChange}
+            required
+          />
+        </label>
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+          </div>
         </div>
+
       );
 };
-
 export default ControlPanel;

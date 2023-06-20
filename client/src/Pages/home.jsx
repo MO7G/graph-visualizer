@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { createContext, useEffect, useRef } from 'react';
 import  { useContext } from 'react';
 import Navbar from '../Navbar/navbar';
 import Footer from '../Footer/footer';
@@ -19,11 +19,13 @@ let fps = 50;
 let interval = 1000 /fps;
 let last = 0;
 let graph,mouse_down,requestId,search;
+const myContextTest = createContext();
+
+
 
 const Home = () => {
   const myRef = useRef(null);
   const {operation,algorithm,x,y} = useContext(SharedValuesContext);
-  
   const test = () =>{
     console.log(x, " " , y)
   }
@@ -93,31 +95,11 @@ const Home = () => {
   }
 
   const makeBoardReady = () =>{
-    let finalWidth , finalHeight
-    console.log(1)
-    if(x > 0 && y > 0){
-      finalWidth = y;
-      finalHeight = x;
-    }else{
-      finalWidth = column
-      finalHeight = row
-    }
-    console.log(1)
+  
 
-    if( finalWidth > 50 || finalHeight > 50){
-      console.log("can't process this ")
-      return;
-    }
-    console.log(1)
-
-    if(finalWidth == '' || finalHeight == ''){
-      console.log("width or height is not input")
-      return;
-    }
-    console.log(1)
-
-    row = finalHeight;
-    column = finalWidth;
+    row = x;
+    column = y;
+    console.log(x,y)
     console.log(1)
 
     // delete the actual graph I have 
@@ -126,7 +108,6 @@ const Home = () => {
       row.forEach((cell)=>{
         cell.div.remove();
       })
-    console.log(1)
   });
     generateGrid();
     console.log(13)
@@ -140,18 +121,19 @@ const Home = () => {
   // using effect with empty array to trigger the function when component is mounted!!!
   useEffect(() => {
     generateGrid();
-  }, []);
+  },[]);
   
   
 
   return (
+    
     <div>
       <Navbar/>
-      <TempDashBoard></TempDashBoard>
+      <TempDashBoard MakeBoardReady={makeBoardReady}></TempDashBoard>
       <div id="board-container">
         <div ref={myRef} id="board">
           <h1>yes no</h1>
-          <button className='apply' onClick={makeBoardReady}>apply</button>
+          <button className='apply' onClick={test}>apply</button>
         </div>
       </div>
       <Footer />

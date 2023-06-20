@@ -6,8 +6,8 @@ export function SharedValuesProvider({ children }) {
   const [operation,setOperation] = useState('');
   const [algorithm,setAlgorithm] = useState('');
   // x and y have temporarily values until seting up the frontend
-  const [x,setX] = useState(33);
-  const [y,setY] = useState(33);
+  const [x,setX] = useState();
+  const [y,setY] = useState();
 
   const values = {operation,setOperation,algorithm,setAlgorithm,x,setX,y,setY}
   return (

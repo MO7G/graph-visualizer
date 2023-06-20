@@ -4,14 +4,15 @@ import logo from '../style/logo/My project.png'
 
 import '../style/styles.css'
 const Navbar = () => {
+
+  
   const myRef = useRef(null);
-  const { a, setA, b, setB} = useContext(SharedValuesContext);
   const solve = () =>{
     //myRef.current.querySelector('.navbar-submit').style.backgroundColor = "white"
   let short = myRef.current;
   for(let i = 1 ;i <=3;i++){
     let value = short.querySelector(`.navbar-item-${i}`).innerText;
-    setA(value)
+    // do something 
   }
   }
 

@@ -1,5 +1,7 @@
 export const final = {
     cell_dimension: 2,
+    rows : 10,
+    columns: 10,
      WALL_COLOR : "rgb(52, 152, 219)",
      CLEAR_COLOR : "rgb(255, 255, 255)",
      UNDISCOVERED_COLOR : "rgb(255, 255, 255)",

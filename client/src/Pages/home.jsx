@@ -5,14 +5,14 @@ import Footer from '../Footer/footer';
 import {Graph} from '../HomeStuff/Graph.jsx';
 import {Search,Cell} from '../HomeStuff/search.js'
 import SharedValuesContext from '../SharedStuff/SharedVariables';
-import Dashboard from '../HomeStuff/dashBoard';
-
+import TempDashBoard from '../HomeStuff/tempDashBoard.js'
+import { final } from '../HomeStuff/final';
 
 
 
 const cellDim = 2;
-const row = 5
-const column = 5
+let row = final.rows
+let column = final.columns
 let game_mode = false;
 let game_animation = false;
 let fps = 50;
@@ -22,10 +22,10 @@ let graph,mouse_down,requestId,search;
 
 const Home = () => {
   const myRef = useRef(null);
-  const { a, b} = useContext(SharedValuesContext);
-
+  const {operation,algorithm,x,y} = useContext(SharedValuesContext);
+  
   const test = () =>{
-    console.log(a)
+    console.log(x, " " , y)
   }
   const fixCell = (cell) =>{
       cell.onclick = function(event){
@@ -92,7 +92,49 @@ const Home = () => {
     }
   }
 
-  
+  const makeBoardReady = () =>{
+    let finalWidth , finalHeight
+    console.log(1)
+    if(x > 0 && y > 0){
+      finalWidth = y;
+      finalHeight = x;
+    }else{
+      finalWidth = column
+      finalHeight = row
+    }
+    console.log(1)
+
+    if( finalWidth > 50 || finalHeight > 50){
+      console.log("can't process this ")
+      return;
+    }
+    console.log(1)
+
+    if(finalWidth == '' || finalHeight == ''){
+      console.log("width or height is not input")
+      return;
+    }
+    console.log(1)
+
+    row = finalHeight;
+    column = finalWidth;
+    console.log(1)
+
+    // delete the actual graph I have 
+    // but do I need to delete the graph actually??? I will check later!!
+    graph.board.forEach(row => {
+      row.forEach((cell)=>{
+        cell.div.remove();
+      })
+    console.log(1)
+  });
+    generateGrid();
+    console.log(13)
+
+  }
+  const define = ()=>{
+  makeBoardReady();
+  }
 
 
   // using effect with empty array to trigger the function when component is mounted!!!
@@ -104,12 +146,12 @@ const Home = () => {
 
   return (
     <div>
-      <Navbar />
-      <Dashboard></Dashboard>
+      <Navbar/>
+      <TempDashBoard></TempDashBoard>
       <div id="board-container">
         <div ref={myRef} id="board">
           <h1>yes no</h1>
-          <button className='apply' onClick={test}>apply</button>
+          <button className='apply' onClick={makeBoardReady}>apply</button>
         </div>
       </div>
       <Footer />

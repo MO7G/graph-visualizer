@@ -1,8 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './Pages/home.jsx';
+import ReactDOM from 'react-dom';
+import Home from './Pages/home.jsx';
+import { SharedValuesProvider } from './SharedStuff/SharedVariables.js';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-    <App />
+ReactDOM.render(
+  <SharedValuesProvider>
+    <Home />
+  </SharedValuesProvider>,
+  document.getElementById('root')
 );

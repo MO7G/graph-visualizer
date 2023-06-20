@@ -1,8 +1,14 @@
 import React, { useEffect, useRef } from 'react';
+import  { useContext } from 'react';
 import Navbar from '../Navbar/navbar';
 import Footer from '../Footer/footer';
 import {Graph} from '../HomeStuff/Graph.jsx';
 import {Search,Cell} from '../HomeStuff/search.js'
+import SharedValuesContext from '../SharedStuff/SharedVariables';
+import Dashboard from '../HomeStuff/dashBoard';
+
+
+
 
 const cellDim = 2;
 const row = 5
@@ -16,7 +22,11 @@ let graph,mouse_down,requestId,search;
 
 const Home = () => {
   const myRef = useRef(null);
-  
+  const { a, b} = useContext(SharedValuesContext);
+
+  const test = () =>{
+    console.log(a)
+  }
   const fixCell = (cell) =>{
       cell.onclick = function(event){
        updateCell(event);
@@ -40,7 +50,7 @@ const Home = () => {
   }
 
 
-
+  
   const generateGrid = () => {
     const gridDom = myRef.current;
     graph = new Graph();
@@ -74,12 +84,16 @@ const Home = () => {
     }
   };
   
+  
 
   const animate = (timeStamp) =>{
     if(game_mode){
 
     }
   }
+
+  
+
 
   // using effect with empty array to trigger the function when component is mounted!!!
   useEffect(() => {
@@ -91,9 +105,11 @@ const Home = () => {
   return (
     <div>
       <Navbar />
+      <Dashboard></Dashboard>
       <div id="board-container">
         <div ref={myRef} id="board">
           <h1>yes no</h1>
+          <button className='apply' onClick={test}>apply</button>
         </div>
       </div>
       <Footer />

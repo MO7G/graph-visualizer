@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Home from './Pages/home.jsx';
+import HomeParent from './Pages/homeParent.js';
 import { SharedValuesProvider } from './SharedStuff/SharedVariables.js';
 
 ReactDOM.render(
   <SharedValuesProvider>
-    <Home />
+    <HomeParent />
   </SharedValuesProvider>,
   document.getElementById('root')
 );

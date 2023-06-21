@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useRef } from 'react';
+import React, { createContext, useEffect, useRef, useState } from 'react';
 import  { useContext } from 'react';
 import Navbar from '../Navbar/navbar';
 import Footer from '../Footer/footer';
@@ -7,9 +7,7 @@ import {Search,Cell} from '../HomeStuff/search.js'
 import SharedValuesContext from '../SharedStuff/SharedVariables';
 import TempDashBoard from '../HomeStuff/tempDashBoard.js'
 import { final } from '../HomeStuff/final';
-
-
-
+import myContext from '../SharedStuff/SharedVariables'
 const cellDim = 2;
 let row = final.rows
 let column = final.columns
@@ -18,45 +16,53 @@ let game_animation = false;
 let fps = 50;
 let interval = 1000 /fps;
 let last = 0;
-let graph,mouse_down,requestId,search;
-const myContextTest = createContext();
 
 
 
-const Home = () => {
+const Home = (props) => {
+  let graph,mouse_down,requestId,search;
+
   const myRef = useRef(null);
-  const {operation,algorithm,x,y} = useContext(SharedValuesContext);
-  const test = () =>{
-    console.log(x, " " , y)
-  }
-  const fixCell = (cell) =>{
+  const {operation,setOperation,algorithm,setAlgorithm,x,setX,y,setY} = useContext(SharedValuesContext);
+  const [localOperation,setLocalOperation] = useState('');
+  const handleUpdateCell = (cell) =>{
       cell.onclick = function(event){
-       updateCell(event);
+      updateCell(event);
        // If i want to access the css or anything I should use the event.target !!!
       //event.target.style.backgroundColor = "red"
       }
   }
 
-  const printPosInGrid= (row,col)=>{
-    console.log(graph.board[row][col])
-  }
 
+  
   const updateCell = (event) =>{
-        let cell = event.target
-        let row = Number(cell.getAttribute('data-row'));
-        let col = Number(cell.getAttribute('data-col'));
-      let finalCell =   (row * 10) + col + 1;
-        console.log("this is cell " + finalCell)
-        printPosInGrid(row,col)
-
+        let short = event.target
+        let row = Number(short.getAttribute('data-row'));
+        let col = Number(short.getAttribute('data-col'));
+        const cell = graph.board[row][col]
+        
+        let color;
+        if(props.myRef.current.querySelector('#select_mode1').checked){
+          color = final.WALL_COLOR
+        }else if(props.myRef.current.querySelector('#select_mode4').checked){
+          color = final.CLEAR_COLOR;
+        }else if(props.myRef.current.querySelector('#select_mode2').checked){
+          color = final.SOURCE_COLOR
+        }else if(props.myRef.current.querySelector('#select_mode3').checked){
+          color = final.TARGET_COLOR
+        }
+        // updating our actuall graph ....
+        graph.update(cell,color);
+      }
+ 
+  const  test = () =>{
   }
-
 
   
   const generateGrid = () => {
     const gridDom = myRef.current;
     graph = new Graph();
-
+    console.log("this is me " , operation)
     for (let i = 0; i < row; i++) {
       let row_div = document.createElement('div');
       let row_graph = []
@@ -68,10 +74,9 @@ const Home = () => {
         cell.setAttribute('data-row',i.toString());
         cell.setAttribute('data-col',j.toString());
         cell.style.backgroundColor = "white";
-
         cell.classList.add('cell');
         // adding an event hnadle for each cell when creating the grid!!!
-        fixCell(cell);
+        handleUpdateCell(cell);
         // adding the cell to the row
         row_div.appendChild(cell)
         // the same way I added event handler to the dom inside the div 
@@ -95,8 +100,6 @@ const Home = () => {
   }
 
   const makeBoardReady = () =>{
-  
-
     row = x;
     column = y;
     console.log(x,y)
@@ -108,7 +111,7 @@ const Home = () => {
       row.forEach((cell)=>{
         cell.div.remove();
       })
-  });
+ });
     generateGrid();
     console.log(13)
 
@@ -118,25 +121,27 @@ const Home = () => {
   }
 
 
+  
+
+
   // using effect with empty array to trigger the function when component is mounted!!!
   useEffect(() => {
-    generateGrid();
-  },[]);
+          generateGrid();
+        }, []);
   
-  
+  useEffect(()=>{
+    setLocalOperation(operation)
+  },[operation])
 
   return (
     
     <div>
-      <Navbar/>
-      <TempDashBoard MakeBoardReady={makeBoardReady}></TempDashBoard>
       <div id="board-container">
         <div ref={myRef} id="board">
           <h1>yes no</h1>
           <button className='apply' onClick={test}>apply</button>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

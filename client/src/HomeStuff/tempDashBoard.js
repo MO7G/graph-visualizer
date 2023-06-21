@@ -1,17 +1,30 @@
-import React, { useState,useContext, useEffect, createContext } from 'react';
+import React, { useState,useContext, useEffect, createContext,useImperativeHandle } from 'react';
 import SharedValuesContext from '../SharedStuff/SharedVariables';
-const ControlPanel = (props) => {
-    const {operation,setOperation,x,setX,y,setY} = useContext(SharedValuesContext);
+const ControlPanel = React.forwardRef((props,ref) => {
+    const {operation,setOperation,algorithm,setAlgorithm,x,setX,y,setY} = useContext(SharedValuesContext);
     const [selectedMode, setSelectedMode] = useState('wall');
     const [width, setWidth] = useState('');
     const [height, setHeight] = useState('');
-
+    const [flag , setFlag] = useState(false);
+    
     const handleModeChange = (mode) => {
     setSelectedMode(mode);
     setOperation(mode)
     }
 
-   
+    const test = () =>{
+        console.log(operation);
+    }
+
+    useImperativeHandle(ref, () => ({
+    okay(){
+        okay()
+    }
+      }))
+
+      const okay = () =>{
+        console.log("yes")
+      }
   
     const handleWidthChange =  async (event) => {
       setWidth(event.target.value);
@@ -39,17 +52,26 @@ const ControlPanel = (props) => {
        setY(width);
       console.log("this is the x and y " , x," ",y);
       
-      props.MakeBoardReady();
 
       // Clear input fields
       setWidth('');
       setHeight('');
+
+      // running makeGrid-useEffect
+      setFlag(true);
     };
 
-
-    useEffect(()=>{
-        setOperation(selectedMode);
-    },[])
+    // generateing the board after updating x and y makeGrid-useEffect
+    useEffect(() => {
+        if (x && y && flag === true) {
+          props.MakeBoardReady();
+        }
+      }, [x, y, props.makeBoardReady,flag]);
+   
+   // One Time useEffect to make the dashBoard Ready for use
+   useEffect(() => {
+    setOperation(selectedMode);
+  }, [selectedMode]);
 
     return (
         <div className="control-panel">
@@ -142,9 +164,12 @@ const ControlPanel = (props) => {
       </div>
       <button type="submit">Submit</button>
     </form>
+    <button onClick={test}>from dashbaord</button>
           </div>
         </div>
 
       );
-};
+});
 export default ControlPanel;
+
+

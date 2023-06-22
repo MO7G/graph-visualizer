@@ -12,3 +12,13 @@
 .cell.target{
     background-color: green  !important;
 }
+
+.cell.visiting{
+    background-color: blue !important;
+    transition: all 1s !important;
+}
+
+.cell.done{
+    background-color: yellow !important;
+
+}

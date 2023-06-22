@@ -43,8 +43,9 @@ const dfs =(xStart,yStart , xEnd,yEnd , row , col ,counter,vis,grid,path)=>{
    // counter = counter + 1;
    // console.log(`grid number ${counter}`,grid)
    //console.log(counter);
-  //  console.log(xStart,yStart);
+    console.log(xStart,yStart);
     path.push([xStart,yStart])
+
   //  console.log(xStart, "  " , yStart);
     if (xStart === xEnd && yStart === yEnd) {
         console.log("Reached the target position");

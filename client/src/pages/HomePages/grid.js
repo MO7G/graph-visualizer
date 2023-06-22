@@ -105,16 +105,51 @@ const Grid = (props) => {
     return answer;
   }
 
+  const draw = (path, fps) => {
+    const cellElements = Array.from(document.getElementsByClassName('cell'));
+    const duration = 300 * path.length; // Total duration of the first loop
+    const delay = 1000 / fps; // Delay between frames based on fps
+  
+    const animateFirstLoop = () => {
+      return new Promise((resolve) => {
+        path.forEach((position, index) => {
+          const [row, col] = position;
+          const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+  
+          // Add a delay to the animation
+          setTimeout(() => {
+            cell.classList.add('visiting');
+    
+            if (index === path.length - 1) {
+              resolve(); // Resolve the promise when the first loop finishes
+            }
+          }, delay * index); // Adjust the delay based on fps
+        });
+      });
+    };
+  
+    animateFirstLoop().then(() => {
+      path.slice().reverse().forEach((position, index) => {
+        const [row, col] = position;
+        const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+  
+        // Add a delay to the animation
+        setTimeout(() => {
+          cell.classList.add('done');
+        }, delay * index); // Adjust the delay based on fps
+      });
+    });
+  };
+  
+  
   const Animate = () =>{
-
     let flag = handleErrorMessage()
     if(flag){
       let object = handleGridDTS(props.row,props.col);
       console.log(object)
       if(object.algorithm === 'dfs'){
         let animation = DfsHelper(object)
-        //console.log(object)
-        //console.log(animation)
+        draw(animation,10);
       }
   
     }

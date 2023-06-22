@@ -16,6 +16,8 @@ const HomePage = () => {
     cell.classList.remove('wall');
     cell.classList.remove('source')
     cell.classList.remove('target')
+    cell.classList.remove('visiting')
+    cell.classList.remove('done')
     // Remove any other classes as needed
   });
      //console.log(Array.from(cells))

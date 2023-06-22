@@ -1,5 +1,8 @@
 import React, { useState, version,useEffect } from 'react';
 import '../../css/grid.css'
+import Dfs from '../../Algorithm/DFS'
+import DfsHelper from '../../Algorithm/DFS';
+
 
 let algorithm = 'dfs';
 
@@ -31,23 +34,30 @@ const Grid = (props) => {
     cell.classList.remove('wall');
     cell.classList.remove('source');
     cell.classList.remove('target');
-   }
+}
   
 };
+ 
+  const handleErrorMessage = () =>{
+    const sourceAndTarget = checkSourceAndTarget();
+    let message = sourceAndTarget.get('message');
+    if(message === true){
+      return true;
+    }else{
+      window.alert(message)
+      return false;
+    }
+  }
 
-
-
-  const handleGridDTS = () =>{
-    const cell = Array.from(document.getElementsByClassName('cell'))
-    console.log(cell)
-    
+  const handleGridDTS = (row,col) =>{
+    const cell = Array.from(document.getElementsByClassName('cell'))    
     let source = [];
     let target = [];
     let realGrid = [];
-    for(let i  = 0; i < props.row ; i++){
+    for(let i  = 0; i < row ; i++){
       let row = [];
-        for(let j = 0 ;j < props.col ;j++){
-          let div = cell[i*props.col + j].classList;
+        for(let j = 0 ;j < col ;j++){
+          let div = cell[i*col + j].classList;
           
           if(div.contains('source')){
             source[0] = i;
@@ -72,23 +82,44 @@ const Grid = (props) => {
       realGrid,
       source,
       target,
-      algorithm
+      algorithm,
+      row,
+      col
     };
+    return gridData
   }
 
-   const ValidateGrid = () =>{
+   const checkSourceAndTarget = () =>{
+    let answer = new Map();
     const source = document.querySelector('.source')
     const target = document.querySelector('.target');
-    if(source !== null && target != null){
-      return true;
+    if (source === null && target === null) {
+      answer.set('message', 'Both source and target elements are not chosen');
+    } else if (source === null) {
+      answer.set('message', 'Source element is not chosen');
+    } else if (target === null) {
+      answer.set('message', 'Target element is not chosen');
+    } else {
+      answer.set('message', true);
     }
-    return false;
+    return answer;
   }
 
   const Animate = () =>{
-    let answer = ValidateGrid()
-    console.log(ValidateGrid())
+
+    let flag = handleErrorMessage()
+    if(flag){
+      let object = handleGridDTS(props.row,props.col);
+      console.log(object)
+      if(object.algorithm === 'dfs'){
+        let animation = DfsHelper(object)
+        //console.log(object)
+        //console.log(animation)
+      }
+  
+    }
   }
+
   const handleMouseDown = (event) => {
     if (event.button === 0) {
       setMouseClicked(true);
@@ -168,8 +199,9 @@ const Grid = (props) => {
     {generateGrid()}  
     <h1>{props.selectedOption}</h1>
     <button onClick={handleGridDTS}>generate ds</button>
-    <button onClick={ValidateGrid}>ValidateGrid</button>
+    <button onClick={checkSourceAndTarget}>ValidateGrid</button>
     <button onClick={Animate}>animate</button>
+    <button onClick={handleErrorMessage}>error message</button>
     </div>
 
   );

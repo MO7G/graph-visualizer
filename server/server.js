@@ -12,4 +12,4 @@ app.get("/api",(req,res)=>{
 
 app.listen(5000,()=>{
     console.log("server start on port 5000")
-})
+}) 

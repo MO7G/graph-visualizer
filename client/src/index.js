@@ -1,11 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import HomeParent from './Pages/homeParent.js';
-import { SharedValuesProvider } from './SharedStuff/SharedVariables.js';
-
-ReactDOM.render(
-  <SharedValuesProvider>
-    <HomeParent />
-  </SharedValuesProvider>,
-  document.getElementById('root')
+import ReactDOM from 'react-dom/client';
+import App from './pages/HomePages/home'
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
 );
+

@@ -22,7 +22,6 @@ function create2DArray(rows, cols) {
 const DfsHelper = (gridData) =>{
 let path = [];
 let vis= create2DArray(gridData.row,gridData.col);
-console.log("this is visited array " , vis);
 let grid = gridData.realGrid;
 let xStart = gridData.source[0];
 let yStart = gridData.source[1];
@@ -43,7 +42,6 @@ const dfs =(xStart,yStart , xEnd,yEnd , row , col ,counter,vis,grid,path)=>{
    // counter = counter + 1;
    // console.log(`grid number ${counter}`,grid)
    //console.log(counter);
-    console.log(xStart,yStart);
     path.push([xStart,yStart])
 
   //  console.log(xStart, "  " , yStart);
@@ -59,7 +57,6 @@ const dfs =(xStart,yStart , xEnd,yEnd , row , col ,counter,vis,grid,path)=>{
         newX = dx[i] + xStart;
         newY = dy[i] + yStart
         if( check(newX,newY,row,col) && !vis[newX][newY] && grid[newX][newY] !== -1){
-            console.log(newX,newY);
             dfs(newX,newY,xEnd,yEnd,row,col,counter,vis,grid,path);
         }
         if(flag){

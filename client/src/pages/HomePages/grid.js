@@ -148,7 +148,7 @@ const Grid = (props) => {
       let object = handleGridDTS(props.row,props.col);
       if(object.algorithm === 'dfs'){
         let animation = DfsHelper(object)
-        draw(animation,15);
+        draw(animation,10);
       }
   
     }

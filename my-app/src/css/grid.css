@@ -1,0 +1,45 @@
+
+.cell{
+    display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Arial', sans-serif;
+  font-size: 1.5em;
+  border: 0.01px solid black !important;
+  background-color: black !important;
+}
+.cell:hover{
+    background-color: blueviolet !important;
+}
+
+.cell.wall{
+    background-color: rgb(204, 16, 16) !important;
+    transition: all 1s;
+}
+.cell.source{
+    background-color: #ff0054 !important;
+}
+.cell.target{
+    background-color: #ffff3f  !important;
+}
+
+.cell.visiting {
+ background-color: yellow !important;
+    transition: all 1s;
+
+}
+
+
+
+
+
+.cell.done{
+    background-color: violet !important;
+   transition: all 1s;
+}
+
+
+.slider-container {
+  width: 200px; /* Set the desired width of the slider container */
+  margin-bottom: 10px; /* Add some bottom margin for spacing */
+}

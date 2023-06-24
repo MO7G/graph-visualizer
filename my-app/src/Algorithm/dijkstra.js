@@ -58,7 +58,7 @@ const DijHelper = (gridData) => {
 };
 const dij =(xStart , yStart , xEnd , yEnd, row , col ,dis , grid , path ,parent) =>{
 const pq = new FastPriorityQueue();
-
+let counter = 0;
     dis[xStart][yStart] = 0;
     pq.add([0,xStart,yStart]);
     while(!pq.isEmpty()){
@@ -75,7 +75,8 @@ const pq = new FastPriorityQueue();
         for(let i = 0; i<4;i++){
             let nx = x+dx[i];
             let ny = y +dy[i];
-            if(check(nx,ny,col,row) && grid[nx][ny] != -1){
+            console.log("try " , counter++ );
+            if(check(nx,ny,row,col) && grid[nx][ny] !== -1){
                 let newCost = w + grid[nx][ny];
                 if(newCost<dis[nx][ny]){
                     dis[nx][ny] = newCost;

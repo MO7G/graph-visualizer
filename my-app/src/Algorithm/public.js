@@ -1,5 +1,4 @@
 
-
 export const create2DArray = (rows, cols) => {
     const grid = [];
     for (let i = 0; i < rows; i++) {

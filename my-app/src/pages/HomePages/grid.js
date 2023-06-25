@@ -219,9 +219,24 @@ const Grid = React.forwardRef((props,ref) => {
 
   }
 
+  const specialClear = () =>{
+    const cell = Array.from(document.getElementsByClassName('cell'))
+   // const cellWeight = Array.from(document.getElementsByClassName('grid-number'))
+    let row = props.row;
+    let col = props.col;
+    for (let i = 0; i < row; i++) {
+  
+      for (let j = 0; j < col; j++) {
+        let div = cell[i * col + j].classList;     
+           div.remove('done');
+           div.remove('visiting')
+      }
+    }
+  }
   const Animate = () => {
     let flag = handleErrorMessage()
     if (flag) {
+      specialClear();
       let object = handleGridDTS(props.row, props.col);
       if (object.algorithm === 'dfs') {
         let animation = DfsHelper(object)
@@ -271,13 +286,7 @@ const Grid = React.forwardRef((props,ref) => {
 
   }, [mouseClicked]);
 
-  const updateCell = (event) => {
-    const target = event.target;
-    const row = Number(target.getAttribute('data-row'));
-    const col = Number(target.getAttribute('data-col'));
-    // Rest of the updateCell logic...
-  };
-
+ 
 
   // Function to fill the grid with random numbers
   const fillGridWithNumbers = () => {
@@ -340,6 +349,7 @@ const Grid = React.forwardRef((props,ref) => {
         const cell = document.querySelector(`[data-row="${x}"][data-col="${y}"]`);
         setTimeout(() => {
           cell.classList.add('wall');
+          
         }, 10 * i + j);
 
       }

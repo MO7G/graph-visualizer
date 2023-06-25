@@ -5,7 +5,7 @@
   justify-content: center;
   font-family: 'Arial', sans-serif;
   font-size: 1.5em;
-  border: 0.01px  black  !important;
+  border: 0.01px  black solid !important;
   width: 50px; /* Adjust the width as per your requirements */
   height: 50px; /* Adjust the height as per your requirements */
   background-color: #20262E !important;

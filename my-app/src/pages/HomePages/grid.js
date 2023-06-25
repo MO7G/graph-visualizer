@@ -1,22 +1,23 @@
-import React, { useState, version, useEffect,useImperativeHandle } from 'react';
+import React, { useState, version, useEffect, useImperativeHandle } from 'react';
 import '../../css/grid.css'
 import Dfs from '../../Algorithm/DFS'
 import DfsHelper from '../../Algorithm/DFS';
 import BfsHelper from '../../Algorithm/BFS'
 import DijHelper from '../../Algorithm/dijkstra';
 import mazeGenerator from '../../Algorithm/Testing/mazeGenerator'
+import AStarHelper from '../../Algorithm/Astar';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
-const Grid = React.forwardRef((props,ref) => {
-  let cellDim = 0.5
+const Grid = React.forwardRef((props, ref) => {
+  let cellDim = 0.2
   const [mouseClicked, setMouseClicked] = useState(false);
   const [gridNumbers, setGridNumbers] = useState([]);
   const [sliderValue, setSliderValue] = useState(60); // Default value of 60
-  const [weightAllowed,setWeightAllowed] = useState(false);
+  const [weightAllowed, setWeightAllowed] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
 
   useImperativeHandle(ref, () => ({
@@ -25,7 +26,7 @@ const Grid = React.forwardRef((props,ref) => {
   }))
 
 
-  const handleOrder = (buttonId) => {  
+  const handleOrder = (buttonId) => {
     if (buttonId === 'clearButton') {
       // Handle Clear button click
       clearGrid();
@@ -47,17 +48,17 @@ const Grid = React.forwardRef((props,ref) => {
     }
   };
 
-  const doWork = ()=>{
-    for(let i  = 0 ;i < 3000000000;i++){
+  const doWork = () => {
+    for (let i = 0; i < 3000000000; i++) {
     }
     return 12;
   }
-  
-  const testing = async () =>{
+
+  const testing = async () => {
     if (!buttonDisabled) {
-      setButtonDisabled(true); 
+      setButtonDisabled(true);
       toast.loading('Running Dijkstra algorithm...', { autoClose: false });
-      await delay(50); 
+      await delay(50);
       doWork();
       toast.dismiss();
       toast('🦄 Wow so easy!', {
@@ -69,14 +70,14 @@ const Grid = React.forwardRef((props,ref) => {
         draggable: true,
         progress: undefined,
         theme: "colored",
-        });
+      });
       // Once the operation is complete, re-enable the button
       setButtonDisabled(false);
-  
-  }
-    
 
-}
+    }
+
+
+  }
   const handleSliderChange = (value) => {
     setSliderValue(value); // Update the slider value when it changes
   };
@@ -90,7 +91,7 @@ const Grid = React.forwardRef((props,ref) => {
     const operation = props.onOption.toLowerCase();
     if (operation === 'wall') {
       cell.classList.add('wall');
-   //   cellWeight[x*props.col + y].classList.remove('visible');
+      //   cellWeight[x*props.col + y].classList.remove('visible');
       //event.target.style.backgroundColor = 'black';
     } else if (operation === 'source') {
       const existingSource = document.querySelector('.source');
@@ -98,20 +99,20 @@ const Grid = React.forwardRef((props,ref) => {
         existingSource.classList.remove('source');
       }
       cell.classList.add('source');
-     // cellWeight[x*props.col + y].classList.remove('visible');
+      // cellWeight[x*props.col + y].classList.remove('visible');
     } else if (operation === 'target') {
       const existingSource = document.querySelector('.target');
       if (existingSource) {
         existingSource.classList.remove('target');
       }
       cell.classList.add('target');
-    //  cellWeight[x*props.col + y].classList.remove('visible');
+      //  cellWeight[x*props.col + y].classList.remove('visible');
     }
     else {
       cell.classList.remove('wall');
       cell.classList.remove('source');
       cell.classList.remove('target');
-     // cellWeight[x*props.col + y].classList.remove('visible');
+      // cellWeight[x*props.col + y].classList.remove('visible');
 
     }
 
@@ -135,20 +136,20 @@ const Grid = React.forwardRef((props,ref) => {
     let source = [];
     let target = [];
     let realGrid = [];
-    
+
     for (let i = 0; i < row; i++) {
       let row = [];
       for (let j = 0; j < col; j++) {
-        let div = cell[i * col + j].classList;     
- 
-        if(weightAllowed){
-        let number = Number(cellWeight[i*col+j].querySelector('p').textContent)
-        if(!div.contains('source') && !div.contains('wall') && !div.contains('target')){
+        let div = cell[i * col + j].classList;
+
+        if (weightAllowed) {
+          let number = Number(cellWeight[i * col + j].querySelector('p').textContent)
+          if (!div.contains('source') && !div.contains('wall') && !div.contains('target')) {
             row.push(number);
-            continue;      
+            continue;
           }
         }
-        
+
         if (div.contains('source')) {
           source[0] = i;
           source[1] = j;
@@ -176,11 +177,10 @@ const Grid = React.forwardRef((props,ref) => {
       row,
       col
     };
-    console.log(gridData);
     return gridData
   }
-  
-  const something = () =>{
+
+  const something = () => {
     const cell = Array.from(document.getElementsByClassName('cell'))
     const cellWeight = Array.from(document.getElementsByClassName('grid-number'))
 
@@ -192,10 +192,10 @@ const Grid = React.forwardRef((props,ref) => {
     for (let i = 0; i < row; i++) {
       let row = [];
       for (let j = 0; j < col; j++) {
-        let div = cell[i * col + j].classList;     
+        let div = cell[i * col + j].classList;
 
       }
-      
+
     }
   }
   const checkSourceAndTarget = () => {
@@ -214,29 +214,38 @@ const Grid = React.forwardRef((props,ref) => {
     return answer;
   }
 
-  const draw = (path, fps) => {
+  const draw = (path) => {
+    let fps = 1
     const cellElements = Array.from(document.getElementsByClassName('cell'));
-    const duration = 1000 * path[0].length; // Total duration of the first loop
+    const duration = fps * path[0].length; // Total duration of the first loop
     const delay = duration / path[0].length; // Delay between frames based on fps and path length
     console.log("this is it ", path[0].length);
 
     const animateFirstLoop = () => {
       return new Promise((resolve) => {
-        path[0].forEach((position, index) => {
-          const [row, col] = position;
+        for (let i = 0; i < path[0].length; i++) {
+          const [row, col] = path[0][i];
           const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
 
-          // Add a delay to the animation
           setTimeout(() => {
             cell.classList.add('visiting');
+            if (i < path[0].length - 1) {
+              const [nextRow, nextCol] = path[0][i + 1];
+              const nextCell = document.querySelector(`[data-row="${nextRow}"][data-col="${nextCol}"]`);
+              nextCell.classList.add('next');
+              cell.classList.remove('next');
+              // cell.classList.toggle('next');
 
-            if (index === path[0].length - 1) {
+            }
+
+            if (i === path[0].length - 1) {
               resolve(); // Resolve the promise when the first loop finishes
             }
-          }, (1 * path[0].length / path[0].length) * index); // Adjust the delay based on fps and path length
-        });
+          }, delay * i); // Adjust the delay based on fps and path length
+        }
       });
     };
+
 
     const animateSecondLoop = () => {
       return new Promise((resolve) => {
@@ -251,93 +260,111 @@ const Grid = React.forwardRef((props,ref) => {
             if (index === path[1].length - 1) {
               resolve(); // Resolve the promise when the second loop finishes
             }
-          }, (1 * path[0].length / path[0].length) * index); // Adjust the delay based on fps and path length
+          }, delay * index); // Adjust the delay based on fps and path length
         });
       });
     };
 
     animateFirstLoop()
       .then(animateSecondLoop).then(() => {
-        handleToastProcessing("","destroy");
-        handleToastProcessing(props.onAlgorithm,"success");
+        handleToastProcessing("", "destroy");
+        handleToastProcessing(props.onAlgorithm, "success");
       })
       .catch((error) => {
         console.error('An error occurred:', error);
       });
 
-     
+
   };
-  
+
   const fillNumber = () => {
 
   }
 
-  const specialClear = () =>{
+  const specialClear = () => {
     const cell = Array.from(document.getElementsByClassName('cell'))
-   // const cellWeight = Array.from(document.getElementsByClassName('grid-number'))
+    // const cellWeight = Array.from(document.getElementsByClassName('grid-number'))
     let row = props.row;
     let col = props.col;
     for (let i = 0; i < row; i++) {
-  
+
       for (let j = 0; j < col; j++) {
-        let div = cell[i * col + j].classList;     
-           div.remove('done');
-           div.remove('visiting')
+        let div = cell[i * col + j].classList;
+        div.remove('done');
+        div.remove('visiting')
       }
     }
   }
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  const handleToastProcessing = (algorithm , reason) =>{
-    if(algorithm == 'dij'){
+  const handleToastProcessing = (algorithm, reason) => {
+    if (algorithm == 'dij') {
       algorithm = "Dijkstra's"
-    }else if ( algorithm === 'bfs'){
+    } else if (algorithm === 'bfs') {
       algorithm = "Breadth firsrt Search";
-    }else if(algorithm === 'dfs'){
+    } else if (algorithm === 'dfs') {
       algorithm = "Depth First Search"
+    } else if (algorithm == 'Astar') {
+      algorithm = "A * Search"
     }
-    if( reason == "processing"){
-    toast.loading(`Processing ${algorithm} algorithm...`, { autoClose: false });
-    }else if(reason =="pathFinding"){
+    if (reason == "processing") {
+      toast.loading(`Processing ${algorithm} algorithm...`, { autoClose: false });
+    } else if (reason == "pathFinding") {
       toast.loading('🦄 Finding The Path!', { autoClose: false });
-    }else if(reason == "success"){
+    } else if (reason == "success") {
       toast.success(`${algorithm} processing is complete.`);
     }
-    else if(reason == "destroy"){
+    else if (reason == "destroy") {
       toast.dismiss();
+    } else if (reason === "error") {
+      toast.error(`${algorithm} couldn't find solution`);
     }
   }
 
   const Animate = async () => {
-    
+
     let flag = handleErrorMessage()
     if (flag) {
       specialClear();
-      let object =  handleGridDTS(props.row, props.col);
+      let object = handleGridDTS(props.row, props.col);
       if (object.algorithm === 'dfs') {
-        handleToastProcessing("dij","processing")
+        handleToastProcessing("dij", "processing")
         await delay(50);
         let animation = await DfsHelper(object);
-        handleToastProcessing("","destroy");
-        handleToastProcessing("","pathFinding")
+        handleToastProcessing("", "destroy");
+        handleToastProcessing("", "pathFinding")
         draw(animation, 100);
       } else if (object.algorithm === 'bfs') {
-        handleToastProcessing("dij","processing")
+        handleToastProcessing("dij", "processing")
         await delay(50);
         let animation = await BfsHelper(object);
-        handleToastProcessing("","destroy");
-        handleToastProcessing("","pathFinding")
+        handleToastProcessing("", "destroy");
+        handleToastProcessing("", "pathFinding")
         draw(animation, 100);
-      }else if(object.algorithm === 'dij'){
-        handleToastProcessing("dij","processing")
+      } else if (object.algorithm === 'dij') {
+        handleToastProcessing("dij", "processing")
         await delay(50);
         let animation = await DijHelper(object);
-        handleToastProcessing("","destroy");
-        handleToastProcessing("","pathFinding")
+        handleToastProcessing("", "destroy");
+        handleToastProcessing("", "pathFinding")
         draw(animation, 100);
-      }else if(object.algorithm === 'bellman-ford'){
-      
+      } else if (object.algorithm === 'bellman-ford') {
+
+      } else if (object.algorithm === 'Astar') {
+        handleToastProcessing("Astar", "processing")
+        await delay(50);
+        let animation = await AStarHelper(object);
+        toast.dismiss()
+        if (animation[0] === null) {
+          handleToastProcessing("Astar", "error");
+
+        } else {
+          handleToastProcessing("", "destroy");
+          handleToastProcessing("", "pathFinding")
+          console.log(animation)
+          draw(animation, 100);
+        }
       }
 
     }
@@ -375,7 +402,7 @@ const Grid = React.forwardRef((props,ref) => {
 
   }, [mouseClicked]);
 
- 
+
 
   // Function to fill the grid with random numbers
   const fillGridWithNumbers = () => {
@@ -383,15 +410,15 @@ const Grid = React.forwardRef((props,ref) => {
     for (let i = 0; i < props.row; i++) {
       const rowNumbers = [];
       for (let j = 0; j < props.col; j++) {
-          // Generate big numbers for the first half of the row
-          if(i === props.row-1 || i === 0 || j === props.col-1 || j === 0){
-          const bigNumber = Math.floor(Math.random() * 10) ; // Random number between 50 and 149
+        // Generate big numbers for the first half of the row
+        if (i === props.row - 1 || i === 0 || j === props.col - 1 || j === 0) {
+          const bigNumber = Math.floor(Math.random() * 10); // Random number between 50 and 149
           rowNumbers.push(bigNumber);
-          }else{
-            const bigNumber = Math.floor(Math.random() * 100) + 50; // Random number between 50 and 149
-            rowNumbers.push(bigNumber);
-          }
-        
+        } else {
+          const bigNumber = Math.floor(Math.random() * 100) + 50; // Random number between 50 and 149
+          rowNumbers.push(bigNumber);
+        }
+
       }
       numbers.push(rowNumbers)
     }
@@ -417,19 +444,19 @@ const Grid = React.forwardRef((props,ref) => {
     const cells = document.getElementsByClassName('cell');
     const cellWeight = document.getElementsByClassName('grid-number');
     Array.from(cells).forEach((cell) => {
-    cell.classList.remove('wall');
-    cell.classList.remove('source')
-    cell.classList.remove('target')
-    cell.classList.remove('visiting')
-    cell.classList.remove('done')
-    // Remove any other classes as needed
-  });
+      cell.classList.remove('wall');
+      cell.classList.remove('source')
+      cell.classList.remove('target')
+      cell.classList.remove('visiting')
+      cell.classList.remove('done')
+      // Remove any other classes as needed
+    });
 
-  //Array.from(cellWeight).forEach((cell) => {
+    //Array.from(cellWeight).forEach((cell) => {
     //cell.classList.remove('visible');
     // Remove any other classes as needed
- // });
-     //console.log(Array.from(cells))
+    // });
+    //console.log(Array.from(cells))
     setGridNumbers([]);
   };
 
@@ -443,7 +470,7 @@ const Grid = React.forwardRef((props,ref) => {
         const cell = document.querySelector(`[data-row="${x}"][data-col="${y}"]`);
         setTimeout(() => {
           cell.classList.add('wall');
-          
+
         }, 10 * i + j);
 
       }
@@ -473,12 +500,12 @@ const Grid = React.forwardRef((props,ref) => {
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
           >
-            <div key={`${i}-${j}`}  data-row={i.toString()}
-            data-col={j.toString()}  className={`grid-number ${number !== null ? 'visible' : ''}`}>
-        <p>
-          {number !== null ? number : ''}
-        </p>
-      </div>
+            <div key={`${i}-${j}`} data-row={i.toString()}
+              data-col={j.toString()} className={`grid-number ${number !== null ? 'visible' : ''}`}>
+              <p>
+                {number !== null ? number : ''}
+              </p>
+            </div>
           </div>
         );
         rowCells.push(cell);
@@ -493,10 +520,10 @@ const Grid = React.forwardRef((props,ref) => {
   };
 
   return (
-  
+
     <div>
       <button onClick={testing} disabled={buttonDisabled}>test me</button>
-      
+
       {generateGrid()}
       <h1>{props.onAlgorithm}</h1>
       <h1>{props.onOption}</h1>
@@ -510,7 +537,7 @@ const Grid = React.forwardRef((props,ref) => {
         />
         <span>{sliderValue}</span> {/* Display the current slider value */}
       </div>
-      
+
     </div >
   );
 });

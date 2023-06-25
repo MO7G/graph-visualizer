@@ -5,7 +5,7 @@
   justify-content: center;
   font-family: 'Arial', sans-serif;
   font-size: 1.5em;
-  border: 0.01px  black solid !important;
+  border: 0.01px  black solid  !important;
   width: 50px; /* Adjust the width as per your requirements */
   height: 50px; /* Adjust the height as per your requirements */
   background-color: #20262E !important;
@@ -17,7 +17,7 @@
 
 .cell.wall{
     background-color: #913175 !important;
-    transition: all 1s;
+    transition: all 0.3s;
 }
 .cell.source{
     background-color: #ff0054 !important;
@@ -28,8 +28,10 @@
 
 .cell.visiting {
  background-color: #DC5F00 !important;
-    transition: all 1s;
 
+}
+.cell.next{
+background-color: #d8ab89 !important;
 }
 .grid-number {
     pointer-events: none;
@@ -48,7 +50,7 @@
     opacity: 0;
     transition: opacity 2s;
     margin:  0;
-    font-size: 10px;
+    font-size: 5px;
   }
   
   .grid-number.visible p {

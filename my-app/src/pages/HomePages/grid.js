@@ -7,6 +7,8 @@ import DijHelper from '../../Algorithm/dijkstra';
 import mazeGenerator from '../../Algorithm/Testing/mazeGenerator'
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const Grid = React.forwardRef((props,ref) => {
@@ -15,7 +17,7 @@ const Grid = React.forwardRef((props,ref) => {
   const [gridNumbers, setGridNumbers] = useState([]);
   const [sliderValue, setSliderValue] = useState(60); // Default value of 60
   const [weightAllowed,setWeightAllowed] = useState(false);
-
+  const [buttonDisabled, setButtonDisabled] = useState(false);
 
   useImperativeHandle(ref, () => ({
     handleOrder,
@@ -45,8 +47,36 @@ const Grid = React.forwardRef((props,ref) => {
     }
   };
 
+  const doWork = ()=>{
+    for(let i  = 0 ;i < 3000000000;i++){
+    }
+    return 12;
+  }
+  
+  const testing = async () =>{
+    if (!buttonDisabled) {
+      setButtonDisabled(true); 
+      toast.loading('Running Dijkstra algorithm...', { autoClose: false });
+      await delay(50); 
+      doWork();
+      toast.dismiss();
+      toast('🦄 Wow so easy!', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        });
+      // Once the operation is complete, re-enable the button
+      setButtonDisabled(false);
+  
+  }
+    
 
-
+}
   const handleSliderChange = (value) => {
     setSliderValue(value); // Update the slider value when it changes
   };
@@ -149,7 +179,25 @@ const Grid = React.forwardRef((props,ref) => {
     console.log(gridData);
     return gridData
   }
+  
+  const something = () =>{
+    const cell = Array.from(document.getElementsByClassName('cell'))
+    const cellWeight = Array.from(document.getElementsByClassName('grid-number'))
 
+    let source = [];
+    let target = [];
+    let realGrid = [];
+    let row = props.row;
+    let col = props.col;
+    for (let i = 0; i < row; i++) {
+      let row = [];
+      for (let j = 0; j < col; j++) {
+        let div = cell[i * col + j].classList;     
+
+      }
+      
+    }
+  }
   const checkSourceAndTarget = () => {
     let answer = new Map();
     const source = document.querySelector('.source')
@@ -209,10 +257,15 @@ const Grid = React.forwardRef((props,ref) => {
     };
 
     animateFirstLoop()
-      .then(animateSecondLoop)
+      .then(animateSecondLoop).then(() => {
+        handleToastProcessing("","destroy");
+        handleToastProcessing(props.onAlgorithm,"success");
+      })
       .catch((error) => {
         console.error('An error occurred:', error);
       });
+
+     
   };
   
   const fillNumber = () => {
@@ -233,22 +286,58 @@ const Grid = React.forwardRef((props,ref) => {
       }
     }
   }
-  const Animate = () => {
+
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const handleToastProcessing = (algorithm , reason) =>{
+    if(algorithm == 'dij'){
+      algorithm = "Dijkstra's"
+    }else if ( algorithm === 'bfs'){
+      algorithm = "Breadth firsrt Search";
+    }else if(algorithm === 'dfs'){
+      algorithm = "Depth First Search"
+    }
+    if( reason == "processing"){
+    toast.loading(`Processing ${algorithm} algorithm...`, { autoClose: false });
+    }else if(reason =="pathFinding"){
+      toast.loading('🦄 Finding The Path!', { autoClose: false });
+    }else if(reason == "success"){
+      toast.success(`${algorithm} processing is complete.`);
+    }
+    else if(reason == "destroy"){
+      toast.dismiss();
+    }
+  }
+
+  const Animate = async () => {
+    
     let flag = handleErrorMessage()
     if (flag) {
       specialClear();
-      let object = handleGridDTS(props.row, props.col);
+      let object =  handleGridDTS(props.row, props.col);
       if (object.algorithm === 'dfs') {
-        let animation = DfsHelper(object)
-        draw(animation, 10);
+        handleToastProcessing("dij","processing")
+        await delay(50);
+        let animation = await DfsHelper(object);
+        handleToastProcessing("","destroy");
+        handleToastProcessing("","pathFinding")
+        draw(animation, 100);
       } else if (object.algorithm === 'bfs') {
-        let animation = BfsHelper(object)
-        console.log(animation)
+        handleToastProcessing("dij","processing")
+        await delay(50);
+        let animation = await BfsHelper(object);
+        handleToastProcessing("","destroy");
+        handleToastProcessing("","pathFinding")
         draw(animation, 100);
       }else if(object.algorithm === 'dij'){
-        let animate = DijHelper(object);
-        console.log(animate)
-        draw(animate,10);
+        handleToastProcessing("dij","processing")
+        await delay(50);
+        let animation = await DijHelper(object);
+        handleToastProcessing("","destroy");
+        handleToastProcessing("","pathFinding")
+        draw(animation, 100);
+      }else if(object.algorithm === 'bellman-ford'){
+      
       }
 
     }
@@ -295,8 +384,13 @@ const Grid = React.forwardRef((props,ref) => {
       const rowNumbers = [];
       for (let j = 0; j < props.col; j++) {
           // Generate big numbers for the first half of the row
-          const bigNumber = Math.floor(Math.random() * 100) + 50; // Random number between 50 and 149
+          if(i === props.row-1 || i === 0 || j === props.col-1 || j === 0){
+          const bigNumber = Math.floor(Math.random() * 10) ; // Random number between 50 and 149
           rowNumbers.push(bigNumber);
+          }else{
+            const bigNumber = Math.floor(Math.random() * 100) + 50; // Random number between 50 and 149
+            rowNumbers.push(bigNumber);
+          }
         
       }
       numbers.push(rowNumbers)
@@ -399,7 +493,10 @@ const Grid = React.forwardRef((props,ref) => {
   };
 
   return (
+  
     <div>
+      <button onClick={testing} disabled={buttonDisabled}>test me</button>
+      
       {generateGrid()}
       <h1>{props.onAlgorithm}</h1>
       <h1>{props.onOption}</h1>

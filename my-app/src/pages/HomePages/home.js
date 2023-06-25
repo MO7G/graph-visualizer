@@ -3,6 +3,8 @@ import Dashboard from './dashBoard';
 import Grid from './grid';
 import Log from './logs';
 import '../../css/home.css'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const HomePage = () => {
   const [row, setRow] = useState(10);
   const [col, setCol] = useState(10);
@@ -47,6 +49,7 @@ const HomePage = () => {
   return (
     <div className='home'>
       <h1>Home Page</h1>
+      <ToastContainer />
       <Dashboard  onHandleOrder={handleOrder} onRow={row} onCol={col} onSetRow={setRow} onSetCol={setCol} onOption={option} onHandleSetOption={handleSetOption} onSizeSubmit={handleSizeSubmit}  handleSetAlgorithm={handleSetAlgorithm} algorithm={algorithm}/>
       <Grid ref={gridRef} row={row} col={col} onOption={option} onAlgorithm={algorithm}  />
       <Log></Log>

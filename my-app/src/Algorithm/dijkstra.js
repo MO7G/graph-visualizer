@@ -75,7 +75,6 @@ let counter = 0;
         for(let i = 0; i<4;i++){
             let nx = x+dx[i];
             let ny = y +dy[i];
-            console.log("try " , counter++ );
             if(check(nx,ny,row,col) && grid[nx][ny] !== -1){
                 let newCost = w + grid[nx][ny];
                 if(newCost<dis[nx][ny]){

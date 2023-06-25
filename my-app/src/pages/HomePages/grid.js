@@ -1,19 +1,51 @@
-import React, { useState, version, useEffect } from 'react';
+import React, { useState, version, useEffect,useImperativeHandle } from 'react';
 import '../../css/grid.css'
 import Dfs from '../../Algorithm/DFS'
 import DfsHelper from '../../Algorithm/DFS';
 import BfsHelper from '../../Algorithm/BFS'
+import DijHelper from '../../Algorithm/dijkstra';
 import mazeGenerator from '../../Algorithm/Testing/mazeGenerator'
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
-let algorithm = 'bfs';
 
-const Grid = (props) => {
-  let cellDim = 0.3
+const Grid = React.forwardRef((props,ref) => {
+  let cellDim = 1
   const [mouseClicked, setMouseClicked] = useState(false);
   const [gridNumbers, setGridNumbers] = useState([]);
   const [sliderValue, setSliderValue] = useState(60); // Default value of 60
+  const [weightAllowed,setWeightAllowed] = useState(false);
+
+
+  useImperativeHandle(ref, () => ({
+    handleOrder,
+    clearGrid
+  }))
+
+
+  const handleOrder = (buttonId) => {  
+    if (buttonId === 'clearButton') {
+      // Handle Clear button click
+      clearGrid();
+    } else if (buttonId === 'animateButton') {
+      Animate();
+      // Handle Animate button click
+    } else if (buttonId === 'kurskalMazeButton') {
+      generateMaze()
+      // Handle Kurskal Maze button click
+    } else if (buttonId === 'randomMazeButton') {
+      generateMaze();
+      // Handle Random Maze button click
+    } else if (buttonId === 'positiveNumbersButton') {
+      fillGridWithNumbers();
+      // Handle Positive Numbers button click
+    } else if (buttonId === 'negativeNumbersButton') {
+      // Handle Negative Numbers button click
+      fillGridWithNegativeNumbers();
+    }
+  };
+
+
 
   const handleSliderChange = (value) => {
     setSliderValue(value); // Update the slider value when it changes
@@ -21,10 +53,14 @@ const Grid = (props) => {
 
   const handleCellClick = (event) => {
     const cell = event.target
+    const cellWeight = Array.from(document.getElementsByClassName('grid-number'))
+    let x = Number(cell.getAttribute('data-row'));
+    let y = Number(cell.getAttribute('data-col'));
     // console.log(cell.classList.value[1])
-    const operation = props.selectedOption.toLowerCase();
+    const operation = props.onOption.toLowerCase();
     if (operation === 'wall') {
       cell.classList.add('wall');
+   //   cellWeight[x*props.col + y].classList.remove('visible');
       //event.target.style.backgroundColor = 'black';
     } else if (operation === 'source') {
       const existingSource = document.querySelector('.source');
@@ -32,17 +68,21 @@ const Grid = (props) => {
         existingSource.classList.remove('source');
       }
       cell.classList.add('source');
+     // cellWeight[x*props.col + y].classList.remove('visible');
     } else if (operation === 'target') {
       const existingSource = document.querySelector('.target');
       if (existingSource) {
         existingSource.classList.remove('target');
       }
       cell.classList.add('target');
+    //  cellWeight[x*props.col + y].classList.remove('visible');
     }
     else {
       cell.classList.remove('wall');
       cell.classList.remove('source');
       cell.classList.remove('target');
+     // cellWeight[x*props.col + y].classList.remove('visible');
+
     }
 
   };
@@ -60,14 +100,25 @@ const Grid = (props) => {
 
   const handleGridDTS = (row, col) => {
     const cell = Array.from(document.getElementsByClassName('cell'))
+    const cellWeight = Array.from(document.getElementsByClassName('grid-number'))
+
     let source = [];
     let target = [];
     let realGrid = [];
+    
     for (let i = 0; i < row; i++) {
       let row = [];
       for (let j = 0; j < col; j++) {
-        let div = cell[i * col + j].classList;
-
+        let div = cell[i * col + j].classList;     
+ 
+        if(weightAllowed){
+        let number = Number(cellWeight[i*col+j].querySelector('p').textContent)
+        if(!div.contains('source') && !div.contains('wall') && !div.contains('target')){
+            row.push(number);
+            continue;      
+          }
+        }
+        
         if (div.contains('source')) {
           source[0] = i;
           source[1] = j;
@@ -86,7 +137,7 @@ const Grid = (props) => {
       }
       realGrid.push(row);
     }
-
+    let algorithm = props.onAlgorithm
     const gridData = {
       realGrid,
       source,
@@ -95,6 +146,7 @@ const Grid = (props) => {
       row,
       col
     };
+    console.log(gridData);
     return gridData
   }
 
@@ -116,7 +168,7 @@ const Grid = (props) => {
 
   const draw = (path, fps) => {
     const cellElements = Array.from(document.getElementsByClassName('cell'));
-    const duration = 100 * path[0].length; // Total duration of the first loop
+    const duration = 1000 * path[0].length; // Total duration of the first loop
     const delay = duration / path[0].length; // Delay between frames based on fps and path length
     console.log("this is it ", path[0].length);
 
@@ -162,11 +214,10 @@ const Grid = (props) => {
         console.error('An error occurred:', error);
       });
   };
-
+  
   const fillNumber = () => {
 
   }
-
 
   const Animate = () => {
     let flag = handleErrorMessage()
@@ -179,6 +230,10 @@ const Grid = (props) => {
         let animation = BfsHelper(object)
         console.log(animation)
         draw(animation, 100);
+      }else if(object.algorithm === 'dij'){
+        let animate = DijHelper(object);
+        console.log(animate)
+        draw(animate,10);
       }
 
     }
@@ -230,12 +285,15 @@ const Grid = (props) => {
     for (let i = 0; i < props.row; i++) {
       const rowNumbers = [];
       for (let j = 0; j < props.col; j++) {
-        const randomNumber = Math.floor(Math.random() * 999);
-        rowNumbers.push(randomNumber);
+          // Generate big numbers for the first half of the row
+          const bigNumber = Math.floor(Math.random() * 100) + 50; // Random number between 50 and 149
+          rowNumbers.push(bigNumber);
+        
       }
-      numbers.push(rowNumbers);
+      numbers.push(rowNumbers)
     }
     setGridNumbers(numbers);
+    setWeightAllowed(true);
   };
 
   const fillGridWithNegativeNumbers = () => {
@@ -249,11 +307,29 @@ const Grid = (props) => {
       numbers.push(rowNumbers);
     }
     setGridNumbers(numbers);
+    setWeightAllowed(true)
   };
 
   const clearGrid = () => {
+    const cells = document.getElementsByClassName('cell');
+    const cellWeight = document.getElementsByClassName('grid-number');
+    Array.from(cells).forEach((cell) => {
+    cell.classList.remove('wall');
+    cell.classList.remove('source')
+    cell.classList.remove('target')
+    cell.classList.remove('visiting')
+    cell.classList.remove('done')
+    // Remove any other classes as needed
+  });
+
+  //Array.from(cellWeight).forEach((cell) => {
+    //cell.classList.remove('visible');
+    // Remove any other classes as needed
+ // });
+     //console.log(Array.from(cells))
     setGridNumbers([]);
   };
+
   const generateMaze = () => {
     let row = props.row;
     let col = props.col;
@@ -293,7 +369,12 @@ const Grid = (props) => {
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
           >
-            {number !== null ? number : ''} {/* Display the number if it exists */}
+            <div key={`${i}-${j}`}  data-row={i.toString()}
+            data-col={j.toString()}  className={`grid-number ${number !== null ? 'visible' : ''}`}>
+        <p>
+          {number !== null ? number : ''}
+        </p>
+      </div>
           </div>
         );
         rowCells.push(cell);
@@ -309,16 +390,9 @@ const Grid = (props) => {
 
   return (
     <div>
-      <button onClick={fillGridWithNegativeNumbers}>fill negative numbers</button>
-      <button onClick={fillGridWithNumbers}>Fill Grid</button> {/* Button to fill the grid */}
       {generateGrid()}
-      <h1>{props.selectedOption}</h1>
-      <button onClick={handleGridDTS}>generate ds</button>
-      <button onClick={checkSourceAndTarget}>ValidateGrid</button>
-      <button onClick={Animate}>animate</button>
-      <button onClick={handleErrorMessage}>error message</button>
-      <button onClick={clearGrid}>clear gird</button>
-      <button onClick={generateMaze}>generate Maze</button>
+      <h1>{props.onAlgorithm}</h1>
+      <h1>{props.onOption}</h1>
       <div className='slider-container'>
         <Slider
           min={1} // Minimum value of the slider
@@ -329,9 +403,10 @@ const Grid = (props) => {
         />
         <span>{sliderValue}</span> {/* Display the current slider value */}
       </div>
+      
     </div >
   );
-};
+});
 
 
 export default Grid;

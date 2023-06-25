@@ -5,36 +5,59 @@
   justify-content: center;
   font-family: 'Arial', sans-serif;
   font-size: 1.5em;
-  border: 0.01px solid black !important;
-  background-color: black !important;
+  border: 0.01px  black  !important;
+  width: 50px; /* Adjust the width as per your requirements */
+  height: 50px; /* Adjust the height as per your requirements */
+  background-color: #20262E !important;
+  
 }
 .cell:hover{
-    background-color: blueviolet !important;
+    background-color: rgb(73, 58, 87) !important;
 }
 
 .cell.wall{
-    background-color: rgb(204, 16, 16) !important;
+    background-color: #913175 !important;
     transition: all 1s;
 }
 .cell.source{
     background-color: #ff0054 !important;
 }
 .cell.target{
-    background-color: #ffff3f  !important;
+    background-color: #2F58CD  !important;
 }
 
 .cell.visiting {
- background-color: yellow !important;
+ background-color: #DC5F00 !important;
     transition: all 1s;
 
 }
-
-
-
+.grid-number {
+    pointer-events: none;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    transition: background-color 2s;
+    color: white;
+  }
+  
+  .grid-number p {
+    opacity: 0;
+    transition: opacity 2s;
+    margin:  0;
+    font-size: 10px;
+  }
+  
+  .grid-number.visible p {
+    opacity: 1;
+  }
 
 
 .cell.done{
-    background-color: violet !important;
+    background-color: rgb(46, 205, 219) !important;
    transition: all 1s;
 }
 
@@ -43,3 +66,4 @@
   width: 200px; /* Set the desired width of the slider container */
   margin-bottom: 10px; /* Add some bottom margin for spacing */
 }
+

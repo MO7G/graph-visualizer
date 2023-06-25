@@ -12,7 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 const Grid = React.forwardRef((props,ref) => {
-  let cellDim = 1
+  let cellDim = 0.5
   const [mouseClicked, setMouseClicked] = useState(false);
   const [gridNumbers, setGridNumbers] = useState([]);
   const [sliderValue, setSliderValue] = useState(60); // Default value of 60

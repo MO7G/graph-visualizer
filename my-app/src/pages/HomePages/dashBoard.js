@@ -75,11 +75,11 @@ const Dashboard = (props) => {
         <form onSubmit={handleSubmit}>
       <label>
         Rows:
-        <input type="number" name='row' required min="1" max="100" />
+        <input type="number" name='row' required min="1" max="300" />
       </label>
       <label>
         Columns:
-        <input type="number"  name='col' required min="1" max="100" />
+        <input type="number"  name='col' required min="1" max="300" />
       </label>
 
       <button type="submit">Submit</button>

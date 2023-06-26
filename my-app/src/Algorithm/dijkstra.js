@@ -27,7 +27,7 @@ const createParent = (rows, cols) => {
     for (let i = 0; i < rows; i++) {
         const row = [];
         for (let j = 0; j < cols; j++) {
-            row.push([0, 0]); // Add zero to each column
+            row.push(0); // Add zero to each column
         }
         grid.push(row); // Add the row to the grid
     }
@@ -43,20 +43,28 @@ const DijHelper = (gridData, type) => {
     let parent = createParent(gridData.row, gridData.col);
     let vis = create2DArray(gridData.row, gridData.col, 0);
     let grid = gridData.realGrid;
+
     let multiSource = gridData.source
     let xEnd = gridData.target[0];
     let yEnd = gridData.target[1];
     let row = gridData.row;
     let col = gridData.col;
+
+
     dij(multiSource, row, col, dis, grid, path, parent, type, vis);
-    let shortestPathArray;
-    if (dis[xEnd][yEnd] != inf) {
-        // shortest path exist 
-        shortestPathArray = shortestPath(xEnd, yEnd, parent);
-        return [path, shortestPathArray]
-    } else {
-        return [path, []];
+    let shortestPathArray = [];
+    console.log(multiSource[0]);
+    console.log(xEnd, yEnd)
+    for (let i = 0; i < row; i++) {
+        let rowString = '';
+        for (let j = 0; j < col; j++) {
+            rowString += parent[i][j] + ' ';
+        }
+        console.log(rowString);
     }
+    constructShortestPath(multiSource[0][0], multiSource[0][1], xEnd, yEnd, parent, shortestPathArray);
+    return [path, shortestPathArray]
+
 
 };
 
@@ -100,10 +108,9 @@ const dij = (multiSource, row, col, dis, grid, path, parent, type, vis) => {
                 let newCost = w + grid[nx][ny];
                 if (newCost < dis[nx][ny]) {
                     dis[nx][ny] = newCost;
+                    console.log("yes")
                     parent[nx][ny] = [x, y];
                     pq.add([newCost, nx, ny]);
-
-                    //counter++;
 
                 }
             }
@@ -120,6 +127,12 @@ const shortestPath = (xEnd, yEnd, parent) => {
     while (a !== 0 || b !== 0) {
         const tempA = parent[a][b][0];
         const tempB = parent[a][b][1];
+        // Break the loop if the parent indices are invalid
+        if (tempA < 0 || tempB < 0) {
+            console.log("Invalid parent indices encountered.");
+            break;
+        }
+        console.log(a, b);
         a = tempA;
         b = tempB;
         path.push([a, b]);
@@ -129,5 +142,22 @@ const shortestPath = (xEnd, yEnd, parent) => {
     return path;
 };
 
+const constructShortestPath = (xStart, yStart, xEnd, yEnd, parent, shortestPath) => {
+    let currentX = xEnd;
+    let currentY = yEnd;
+    while (currentX !== xStart || currentY !== yStart) {
+        shortestPath.push([currentX, currentY]);
+        let parents = parent[currentX][currentY];
+        console.log(currentX, currentY, "-:", parent[currentX][currentY])
+        if (parents) {
+            currentX = parents[0];
+            currentY = parents[1];
+        } else {
+            // No path found, return empty shortest path
+            shortestPath = [];
+            return;
+        }
+    }
+}
 
 export default DijHelper

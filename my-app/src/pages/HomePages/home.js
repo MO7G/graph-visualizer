@@ -11,7 +11,7 @@ const HomePage = () => {
   const [option, setOption] = useState('Wall');
   const [algorithm, setAlgorithm] = useState('dfs');
   const [multi, setMulti] = useState(false)
-  const [sliderValue, setSliderValue] = useState(1); // Default value of 60
+  const [sliderValue, setSliderValue] = useState(0.5); // Default value of 60
 
   const gridRef = useRef()
   const handleSizeSubmit = (newRow, newCol) => {

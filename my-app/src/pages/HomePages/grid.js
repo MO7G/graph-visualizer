@@ -94,6 +94,9 @@ const Grid = React.forwardRef((props, ref) => {
       if (existingSource && algorithm != "multi-dij" && algorithm != "multi-bfs") {
         existingSource.classList.remove('source');
       }
+      cell.classList.remove('wall');
+      cell.classList.remove('done');
+      cell.classList.remove('visiting');
       cell.classList.add('source');
       // cellWeight[x*props.col + y].classList.remove('visible');
     } else if (operation === 'target') {
@@ -102,13 +105,15 @@ const Grid = React.forwardRef((props, ref) => {
         existingSource.classList.remove('target');
       }
       cell.classList.add('target');
-      //  cellWeight[x*props.col + y].classList.remove('visible');
+      cell.classList.remove('wall');
+      cell.classList.remove('done');
+      cell.classList.remove('visiting');
+
     }
     else {
       cell.classList.remove('wall');
       cell.classList.remove('source');
       cell.classList.remove('target');
-      // cellWeight[x*props.col + y].classList.remove('visible');
 
     }
 
@@ -472,6 +477,7 @@ const Grid = React.forwardRef((props, ref) => {
         let numberOfSources = checkNumberOfSource();
         if (numberOfSources) {
           let object = handleGridDTS(props.row, props.col);
+          console.log(object)
           handleToastProcessing("dij", "processing")
           await delay(50);
           let animation = await DijHelper(object, "njn");
@@ -625,6 +631,9 @@ const Grid = React.forwardRef((props, ref) => {
         const cell = document.querySelector(`[data-row="${x}"][data-col="${y}"]`);
         setTimeout(() => {
           cell.classList.add('wall');
+          cell.classList.remove('visiting');
+          cell.classList.remove('done');
+
 
         }, 10 * i + j);
 

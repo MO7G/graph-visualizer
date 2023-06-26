@@ -143,7 +143,7 @@ const Dashboard = (props) => {
               checked={props.algorithm === 'Greedy'}
               onChange={props.handleSetAlgorithm}
             />
-            <label htmlFor="bellman-ford">Greedy Search</label>
+            <label htmlFor="Greedy">Greedy Search</label>
           </div>
           <div>
             <input
@@ -151,9 +151,9 @@ const Dashboard = (props) => {
               name="option1"
               value="multi-bfs"
               checked={props.algorithm === 'multi-bfs'}
-              onChange={props.handleSetAlgorithm}
+              onChange={props.onSetMulti}
             />
-            <label htmlFor="bellman-ford">Multiple Source Bfs</label>
+            <label htmlFor="multi-bfs">Multiple Source Bfs</label>
           </div>
           <div>
             <input
@@ -163,7 +163,7 @@ const Dashboard = (props) => {
               checked={props.algorithm === 'multi-dij'}
               onChange={props.handleSetAlgorithm}
             />
-            <label htmlFor="bellman-ford">Multiple Source Dijkstra</label>
+            <label htmlFor="multi-dij">Multiple Source Dijkstra</label>
           </div>
         </div>
       </div>

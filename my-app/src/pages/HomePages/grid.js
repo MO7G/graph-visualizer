@@ -13,7 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 const Grid = React.forwardRef((props, ref) => {
-  let cellDim = 0.2
+  let cellDim = 0.5
   const [mouseClicked, setMouseClicked] = useState(false);
   const [gridNumbers, setGridNumbers] = useState([]);
   const [sliderValue, setSliderValue] = useState(60); // Default value of 60
@@ -83,6 +83,43 @@ const Grid = React.forwardRef((props, ref) => {
   };
 
   const handleCellClick = (event) => {
+    let algorithm = props.onAlgorithm
+    const cell = event.target
+    const cellWeight = Array.from(document.getElementsByClassName('grid-number'))
+    let x = Number(cell.getAttribute('data-row'));
+    let y = Number(cell.getAttribute('data-col'));
+    // console.log(cell.classList.value[1])
+    const operation = props.onOption.toLowerCase();
+    if (operation === 'wall') {
+      cell.classList.add('wall');
+      //   cellWeight[x*props.col + y].classList.remove('visible');
+      //event.target.style.backgroundColor = 'black';
+    } else if (operation === 'source') {
+      const existingSource = document.querySelector('.source');
+      if (existingSource && algorithm != "multi-dij" && algorithm != "multi-bfs") {
+        existingSource.classList.remove('source');
+      }
+      cell.classList.add('source');
+      // cellWeight[x*props.col + y].classList.remove('visible');
+    } else if (operation === 'target') {
+      const existingSource = document.querySelector('.target');
+      if (existingSource) {
+        existingSource.classList.remove('target');
+      }
+      cell.classList.add('target');
+      //  cellWeight[x*props.col + y].classList.remove('visible');
+    }
+    else {
+      cell.classList.remove('wall');
+      cell.classList.remove('source');
+      cell.classList.remove('target');
+      // cellWeight[x*props.col + y].classList.remove('visible');
+
+    }
+
+  };
+
+  const handleCellClickForMultiSource = (event) => {
     const cell = event.target
     const cellWeight = Array.from(document.getElementsByClassName('grid-number'))
     let x = Number(cell.getAttribute('data-row'));
@@ -114,18 +151,6 @@ const Grid = React.forwardRef((props, ref) => {
       cell.classList.remove('target');
       // cellWeight[x*props.col + y].classList.remove('visible');
 
-    }
-
-  };
-
-  const handleErrorMessage = () => {
-    const sourceAndTarget = checkSourceAndTarget();
-    let message = sourceAndTarget.get('message');
-    if (message === true) {
-      return true;
-    } else {
-      window.alert(message)
-      return false;
     }
   }
 
@@ -180,6 +205,56 @@ const Grid = React.forwardRef((props, ref) => {
     return gridData
   }
 
+  const handleGridDtsForMultiSource = (row, col) => {
+    const cell = Array.from(document.getElementsByClassName('cell'))
+    const cellWeight = Array.from(document.getElementsByClassName('grid-number'))
+
+    let source = [];
+    let target = [];
+    let realGrid = [];
+
+    for (let i = 0; i < row; i++) {
+      let row = [];
+      for (let j = 0; j < col; j++) {
+        let div = cell[i * col + j].classList;
+
+        if (weightAllowed) {
+          let number = Number(cellWeight[i * col + j].querySelector('p').textContent)
+          if (!div.contains('source') && !div.contains('wall') && !div.contains('target')) {
+            row.push(number);
+            continue;
+          }
+        }
+
+        if (div.contains('source')) {
+          source.push([i, j]);
+        }
+
+        if (div.contains('target')) {
+          target[0] = i;
+          target[1] = j;
+        }
+
+        if (div.contains('wall')) {
+          row.push(-1);
+        } else {
+          row.push(0);
+        }
+      }
+      realGrid.push(row);
+    }
+    let algorithm = props.onAlgorithm
+    const gridData = {
+      realGrid,
+      source,
+      target,
+      algorithm,
+      row,
+      col
+    };
+    return gridData
+  }
+
   const something = () => {
     const cell = Array.from(document.getElementsByClassName('cell'))
     const cellWeight = Array.from(document.getElementsByClassName('grid-number'))
@@ -199,28 +274,28 @@ const Grid = React.forwardRef((props, ref) => {
     }
   }
   const checkSourceAndTarget = () => {
-    let answer = new Map();
+    let flag = true;
     const source = document.querySelector('.source')
     const target = document.querySelector('.target');
     if (source === null && target === null) {
-      answer.set('message', 'Both source and target elements are not chosen');
+      flag = !flag;
+      handleToastProcessing("", "source-target")
     } else if (source === null) {
-      answer.set('message', 'Source element is not chosen');
+      flag = !flag;
+      handleToastProcessing("", "source")
     } else if (target === null) {
-      answer.set('message', 'Target element is not chosen');
-    } else {
-      answer.set('message', true);
+      flag = !flag;
+      handleToastProcessing("", "target")
     }
-    return answer;
+    return flag;
   }
 
   const draw = (path) => {
-    let fps = 1
+    let fps = 0.7
     const cellElements = Array.from(document.getElementsByClassName('cell'));
     const duration = fps * path[0].length; // Total duration of the first loop
     const delay = duration / path[0].length; // Delay between frames based on fps and path length
     console.log("this is it ", path[0].length);
-
     const animateFirstLoop = () => {
       return new Promise((resolve) => {
         for (let i = 0; i < path[0].length; i++) {
@@ -228,14 +303,11 @@ const Grid = React.forwardRef((props, ref) => {
           const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
 
           setTimeout(() => {
-            cell.classList.add('visiting');
-            if (i < path[0].length - 1) {
-              const [nextRow, nextCol] = path[0][i + 1];
-              const nextCell = document.querySelector(`[data-row="${nextRow}"][data-col="${nextCol}"]`);
-              nextCell.classList.add('next');
-              cell.classList.remove('next');
-              // cell.classList.toggle('next');
 
+            if (cell.classList.contains('target') || cell.classList.contains('source')) {
+
+            } else {
+              cell.classList.add('visiting');
             }
 
             if (i === path[0].length - 1) {
@@ -255,8 +327,13 @@ const Grid = React.forwardRef((props, ref) => {
 
           // Add a delay to the animation
           setTimeout(() => {
-            cell.classList.add('done');
 
+            // cell.classList.add('done');
+            if (cell.classList.contains('target') || cell.classList.contains('source')) {
+
+            } else {
+              cell.classList.add('done');
+            }
             if (index === path[1].length - 1) {
               resolve(); // Resolve the promise when the second loop finishes
             }
@@ -277,9 +354,6 @@ const Grid = React.forwardRef((props, ref) => {
 
   };
 
-  const fillNumber = () => {
-
-  }
 
   const specialClear = () => {
     const cell = Array.from(document.getElementsByClassName('cell'))
@@ -307,7 +381,10 @@ const Grid = React.forwardRef((props, ref) => {
       algorithm = "Depth First Search"
     } else if (algorithm == 'Astar') {
       algorithm = "A * Search"
+    } else if (algorithm == 'multi-bfs') {
+      algorithm = "Multiple Breadth first Search"
     }
+
     if (reason == "processing") {
       toast.loading(`Processing ${algorithm} algorithm...`, { autoClose: false });
     } else if (reason == "pathFinding") {
@@ -319,52 +396,103 @@ const Grid = React.forwardRef((props, ref) => {
       toast.dismiss();
     } else if (reason === "error") {
       toast.error(`${algorithm} couldn't find solution`);
+    } else if (reason == "source") {
+      toast.error("Source is not set")
+    } else if (reason == "target") {
+      toast.error("Target is not set");
+    } else if (reason == "source-target") {
+      toast.error("Source and Target are not set");
+    } else if (reason == "many-sources") {
+      toast.error("Remove extra Sources");
+    }
+  }
+
+  const checkNumberOfSource = () => {
+    const cell = Array.from(document.getElementsByClassName('cell'))
+    const cellWeight = Array.from(document.getElementsByClassName('grid-number'))
+
+    let source = [];
+    let target = [];
+    let realGrid = [];
+    let row = props.row;
+    let col = props.col;
+    let counter = 0;
+    for (let i = 0; i < row; i++) {
+      let row = [];
+      for (let j = 0; j < col; j++) {
+        let div = cell[i * col + j].classList;
+        if (div.contains('source')) {
+          counter++;
+        }
+      }
+    }
+
+    if (counter == 1) {
+      return true;
+    } else {
+      return false;
     }
   }
 
   const Animate = async () => {
-
-    let flag = handleErrorMessage()
+    let flag = checkSourceAndTarget();
+    let algorithm = props.onAlgorithm
     if (flag) {
       specialClear();
-      let object = handleGridDTS(props.row, props.col);
-      if (object.algorithm === 'dfs') {
-        handleToastProcessing("dij", "processing")
-        await delay(50);
-        let animation = await DfsHelper(object);
-        handleToastProcessing("", "destroy");
-        handleToastProcessing("", "pathFinding")
-        draw(animation, 100);
-      } else if (object.algorithm === 'bfs') {
+      if (algorithm === 'dfs') {
+        let numberOfSources = checkNumberOfSource();
+        if (numberOfSources) {
+          let object = handleGridDTS(props.row, props.col);
+          handleToastProcessing("dij", "processing")
+          await delay(50);
+          let animation = await DfsHelper(object);
+          handleToastProcessing("", "destroy");
+          handleToastProcessing("", "pathFinding")
+          draw(animation, 100);
+        } else {
+          handleToastProcessing("", "many-sources")
+        }
+      } else if (algorithm === 'bfs') {
+        let object = handleGridDTS(props.row, props.col);
         handleToastProcessing("dij", "processing")
         await delay(50);
         let animation = await BfsHelper(object);
         handleToastProcessing("", "destroy");
         handleToastProcessing("", "pathFinding")
         draw(animation, 100);
-      } else if (object.algorithm === 'dij') {
+      } else if (algorithm === 'dij') {
+        let object = handleGridDTS(props.row, props.col);
         handleToastProcessing("dij", "processing")
         await delay(50);
         let animation = await DijHelper(object);
         handleToastProcessing("", "destroy");
         handleToastProcessing("", "pathFinding")
         draw(animation, 100);
-      } else if (object.algorithm === 'bellman-ford') {
+      } else if (algorithm === 'bellman-ford') {
 
-      } else if (object.algorithm === 'Astar') {
+      } else if (algorithm === 'Astar') {
+        let object = handleGridDTS(props.row, props.col);
         handleToastProcessing("Astar", "processing")
         await delay(50);
         let animation = await AStarHelper(object);
         toast.dismiss()
         if (animation[0] === null) {
           handleToastProcessing("Astar", "error");
-
         } else {
           handleToastProcessing("", "destroy");
           handleToastProcessing("", "pathFinding")
           console.log(animation)
           draw(animation, 100);
         }
+      } else if (algorithm === 'multi-bfs') {
+        let object = handleGridDtsForMultiSource(props.row, props.col);
+        handleToastProcessing("mutli-bfs", "processing")
+        await delay(50);
+        let animation = await BfsHelper(object, "multi-bfs");
+        console.log(animation)
+        handleToastProcessing("", "destroy");
+        handleToastProcessing("", "pathFinding")
+        draw(animation, 100);
       }
 
     }
@@ -384,6 +512,7 @@ const Grid = React.forwardRef((props, ref) => {
 
   useEffect(() => {
     const handleMouseEnter = (event) => {
+
       if (mouseClicked) {
         handleCellClick(event)
       }
@@ -527,6 +656,7 @@ const Grid = React.forwardRef((props, ref) => {
       {generateGrid()}
       <h1>{props.onAlgorithm}</h1>
       <h1>{props.onOption}</h1>
+      <h1>{props.onMulti}</h1>
       <div className='slider-container'>
         <Slider
           min={1} // Minimum value of the slider
@@ -537,6 +667,7 @@ const Grid = React.forwardRef((props, ref) => {
         />
         <span>{sliderValue}</span> {/* Display the current slider value */}
       </div>
+
 
     </div >
   );

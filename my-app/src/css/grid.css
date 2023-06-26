@@ -5,10 +5,10 @@
   justify-content: center;
   font-family: 'Arial', sans-serif;
   font-size: 1.5em;
-  border: 0.01px  black solid  !important;
+  border:   #222831   !important;
   width: 50px; /* Adjust the width as per your requirements */
   height: 50px; /* Adjust the height as per your requirements */
-  background-color: #20262E !important;
+  background-color: #222831 !important;
   
 }
 .cell:hover{
@@ -20,14 +20,15 @@
     transition: all 0.3s;
 }
 .cell.source{
-    background-color: #ff0054 !important;
+    background-color: #9ac81e !important;
 }
 .cell.target{
     background-color: #2F58CD  !important;
 }
 
 .cell.visiting {
- background-color: #DC5F00 !important;
+ background-color: #EA906C !important;
+ transition:all 1s ease-in
 
 }
 .cell.next{

@@ -1,11 +1,11 @@
 const FastPriorityQueue = require('fastpriorityqueue');
 const inf = 99999999;
-const create2DArray = (rows, cols) => {
+const create2DArray = (rows, cols, val) => {
     const grid = [];
     for (let i = 0; i < rows; i++) {
         const row = [];
         for (let j = 0; j < cols; j++) {
-            row.push(inf); // Add zero to each column
+            row.push(val); // Add zero to each column
         }
         grid.push(row); // Add the row to the grid
     }
@@ -39,15 +39,16 @@ const DijHelper = (gridData, type) => {
 
     let path = [];
 
-    let dis = create2DArray(gridData.row, gridData.col);
+    let dis = create2DArray(gridData.row, gridData.col, inf);
     let parent = createParent(gridData.row, gridData.col);
+    let vis = create2DArray(gridData.row, gridData.col, 0);
     let grid = gridData.realGrid;
     let multiSource = gridData.source
     let xEnd = gridData.target[0];
     let yEnd = gridData.target[1];
     let row = gridData.row;
     let col = gridData.col;
-    dij(multiSource, row, col, dis, grid, path, parent, type);
+    dij(multiSource, row, col, dis, grid, path, parent, type, vis);
     let shortestPathArray;
     if (dis[xEnd][yEnd] != inf) {
         // shortest path exist 
@@ -59,7 +60,7 @@ const DijHelper = (gridData, type) => {
 
 };
 
-const dij = (multiSource, row, col, dis, grid, path, parent, type) => {
+const dij = (multiSource, row, col, dis, grid, path, parent, type, vis) => {
     const pq = new FastPriorityQueue();
     let xStart, yStart;
     if (type == "multi-dij") {
@@ -68,12 +69,16 @@ const dij = (multiSource, row, col, dis, grid, path, parent, type) => {
             yStart = multiSource[i][1];
             dis[xStart][yStart] = 0;
             pq.add([0, xStart, yStart]);
+            vis[xStart][yStart] = 1;
         }
     } else {
         xStart = multiSource[0][0];
         yStart = multiSource[0][1];
         pq.add([0, xStart, yStart]);
+        vis[xStart][yStart] = 1;
+
     }
+    let counter = 0;
 
     while (!pq.isEmpty()) {
         let obj = pq.peek();
@@ -84,6 +89,10 @@ const dij = (multiSource, row, col, dis, grid, path, parent, type) => {
         if (w > dis[x][y]) {
             continue;
         }
+        if (!vis[x][y]) {
+            path.push([x, y]);
+            vis[x][y] = 1;
+        }
         for (let i = 0; i < 4; i++) {
             let nx = x + dx[i];
             let ny = y + dy[i];
@@ -93,12 +102,15 @@ const dij = (multiSource, row, col, dis, grid, path, parent, type) => {
                     dis[nx][ny] = newCost;
                     parent[nx][ny] = [x, y];
                     pq.add([newCost, nx, ny]);
-                    path.push([nx, ny]);
+
+                    //counter++;
+
                 }
             }
         }
 
     }
+    // console.log(counter);
 }
 
 const shortestPath = (xEnd, yEnd, parent) => {

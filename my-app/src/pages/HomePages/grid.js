@@ -16,7 +16,7 @@ const Grid = React.forwardRef((props, ref) => {
   const [gridNumbers, setGridNumbers] = useState([]);
   const [weightAllowed, setWeightAllowed] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
-  const [cellDim, setCellDim] = useState(2);
+  const [cellDim, setCellDim] = useState(1);
   const [okay, setOkay] = useState(13);
   useImperativeHandle(ref, () => ({
     handleOrder,
@@ -274,8 +274,9 @@ const Grid = React.forwardRef((props, ref) => {
 
   const draw = (path) => {
     const cellElements = Array.from(document.getElementsByClassName('cell'));
-    const duration = props.onSliderValue * path[0].length; // Total duration of the first loop
-    const delay = duration / path[0].length; // Delay between frames based on fps and path length
+    //  const duration = props.onSliderValue * path[0].length; // Total duration of the first loop
+    // const delay = duration / path[0].length; // Delay between frames based on fps and path length
+    const delay = props.onSliderValue;
     const animateFirstLoop = () => {
       return new Promise((resolve) => {
         if (path[0].length === 0) {
@@ -298,6 +299,7 @@ const Grid = React.forwardRef((props, ref) => {
             if (i === path[0].length - 1) {
               resolve(); // Resolve the promise when the first loop finishes
             }
+            console.log("ues")
           }, delay * i); // Adjust the delay based on fps and path length
         }
       });
@@ -445,6 +447,7 @@ const Grid = React.forwardRef((props, ref) => {
           handleToastProcessing("dij", "processing")
           await delay(50);
           let animation = await DfsHelper(object);
+
           handleToastProcessing("", "destroy");
           handleToastProcessing("", "pathFinding")
           draw(animation);
@@ -452,36 +455,54 @@ const Grid = React.forwardRef((props, ref) => {
           handleToastProcessing("", "many-sources")
         }
       } else if (algorithm === 'bfs') {
-        let object = handleGridDTS(props.row, props.col);
-        handleToastProcessing("dij", "processing")
-        await delay(50);
-        let animation = await BfsHelper(object);
-        handleToastProcessing("", "destroy");
-        handleToastProcessing("", "pathFinding")
-        draw(animation);
+        let numberOfSources = checkNumberOfSource();
+        if (numberOfSources) {
+          let object = handleGridDTS(props.row, props.col);
+          handleToastProcessing("dij", "processing")
+          await delay(50);
+          let animation = await BfsHelper(object);
+          handleToastProcessing("", "destroy");
+          handleToastProcessing("", "pathFinding")
+          draw(animation);
+        } else {
+          handleToastProcessing("", "many-sources")
+
+        }
       } else if (algorithm === 'dij') {
-        let object = handleGridDTS(props.row, props.col);
-        handleToastProcessing("dij", "processing")
-        await delay(50);
-        let animation = await DijHelper(object, "njn");
-        handleToastProcessing("", "destroy");
-        handleToastProcessing("", "pathFinding")
-        draw(animation);
+        let numberOfSources = checkNumberOfSource();
+        if (numberOfSources) {
+          let object = handleGridDTS(props.row, props.col);
+          handleToastProcessing("dij", "processing")
+          await delay(50);
+          let animation = await DijHelper(object, "njn");
+          console.log(animation)
+          handleToastProcessing("", "destroy");
+          handleToastProcessing("", "pathFinding")
+          draw(animation);
+        } else {
+          handleToastProcessing("", "many-sources")
+
+        }
       } else if (algorithm === 'bellman-ford') {
 
       } else if (algorithm === 'Astar') {
-        let object = handleGridDTS(props.row, props.col);
-        handleToastProcessing("Astar", "processing")
-        await delay(50);
-        let animation = await AStarHelper(object);
-        toast.dismiss()
-        if (animation[0] === null) {
-          handleToastProcessing("Astar", "error");
-        } else {
-          handleToastProcessing("", "destroy");
-          handleToastProcessing("", "pathFinding")
+        let numberOfSources = checkNumberOfSource();
+        if (numberOfSources) {
+          let object = handleGridDTS(props.row, props.col);
+          handleToastProcessing("Astar", "processing")
+          await delay(50);
+          let animation = await AStarHelper(object);
+          toast.dismiss()
+          if (animation[0] === null) {
+            handleToastProcessing("Astar", "error");
+          } else {
+            handleToastProcessing("", "destroy");
+            handleToastProcessing("", "pathFinding")
 
-          draw(animation);
+            draw(animation);
+          }
+        } else {
+          handleToastProcessing("", "many-sources")
         }
       } else if (algorithm === 'multi-bfs') {
         let object = handleGridDtsForMultiSource(props.row, props.col);
@@ -547,14 +568,11 @@ const Grid = React.forwardRef((props, ref) => {
     for (let i = 0; i < props.row; i++) {
       const rowNumbers = [];
       for (let j = 0; j < props.col; j++) {
-        // Generate big numbers for the first half of the row
-        if (i === props.row - 1 || i === 0 || j === props.col - 1 || j === 0) {
-          const bigNumber = Math.floor(Math.random() * 10); // Random number between 50 and 149
-          rowNumbers.push(bigNumber);
-        } else {
-          const bigNumber = Math.floor(Math.random() * 100) + 50; // Random number between 50 and 149
-          rowNumbers.push(bigNumber);
-        }
+
+        const bigNumber = Math.floor(Math.random() * 10); // Random number between 50 and 149
+        rowNumbers.push(bigNumber);
+
+
 
       }
       numbers.push(rowNumbers)

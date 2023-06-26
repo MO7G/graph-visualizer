@@ -28,7 +28,7 @@
 
 .cell.visiting {
  background-color: #EA906C !important;
- transition:all 1s ease-in
+ transition:all 1s
 
 }
 .cell.next{
@@ -51,7 +51,7 @@ background-color: #d8ab89 !important;
     opacity: 0;
     transition: opacity 2s;
     margin:  0;
-    font-size: 15px;
+    font-size: 10px;
   }
   
   .grid-number.visible p {

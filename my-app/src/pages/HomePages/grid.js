@@ -288,7 +288,7 @@ const Grid = React.forwardRef((props, ref) => {
 
           setTimeout(() => {
 
-            document.querySelector('.rc-slider-handle').getAttribute('aria-valuenow')
+            // document.querySelector('.rc-slider-handle').getAttribute('aria-valuenow')
             if (cell.classList.contains('target') || cell.classList.contains('source')) {
 
             } else {

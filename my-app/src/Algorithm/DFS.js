@@ -63,6 +63,7 @@ const constructShortestPath = (parent, xStart, yStart, xEnd, yEnd) => {
     let [prevX, prevY] = parent[currentX][currentY];
     currentX = prevX;
     currentY = prevY;
+    console.log("asfafds")
   }
 
   shortestPath.push([xStart, yStart]);
@@ -75,8 +76,8 @@ const DfsHelper = (gridData) => {
   let path = [];
   let vis = create2DArray(gridData.row, gridData.col);
   let grid = gridData.realGrid;
-  let xStart = gridData.source[0];
-  let yStart = gridData.source[1];
+  let xStart = gridData.source[0][0];
+  let yStart = gridData.source[0][1];
   let xEnd = gridData.target[0];
   let yEnd = gridData.target[1];
   let row = gridData.row;
@@ -85,7 +86,7 @@ const DfsHelper = (gridData) => {
   let shortestPath = dfs(xStart, yStart, xEnd, yEnd, row, col, vis, grid, path);
   path.shift();
   path.pop();
-
+  console.log(shortestPath);
   return [path, shortestPath];
 };
 

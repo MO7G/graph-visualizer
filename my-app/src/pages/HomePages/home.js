@@ -11,6 +11,8 @@ const HomePage = () => {
   const [option, setOption] = useState('Wall');
   const [algorithm, setAlgorithm] = useState('dfs');
   const [multi, setMulti] = useState(false)
+  const [sliderValue, setSliderValue] = useState(60); // Default value of 60
+
   const gridRef = useRef()
   const handleSizeSubmit = (newRow, newCol) => {
 
@@ -48,15 +50,15 @@ const HomePage = () => {
     gridRef.current.handleOrder(buttonId);
   };
 
-
-
-
+  const hanldeSetSliderValue = (value) => {
+    setSliderValue(value);
+  };
   return (
     <div className='home'>
       <h1>Home Page</h1>
       <ToastContainer />
-      <Dashboard onSetMulti={handleSetMulti} onHandleOrder={handleOrder} onRow={row} onCol={col} onSetRow={setRow} onSetCol={setCol} onOption={option} onHandleSetOption={handleSetOption} onSizeSubmit={handleSizeSubmit} handleSetAlgorithm={handleSetAlgorithm} algorithm={algorithm} />
-      <Grid ref={gridRef} onMulti={multi} row={row} col={col} onOption={option} onAlgorithm={algorithm} />
+      <Dashboard onSliderValue={sliderValue} onSetSliderValue={hanldeSetSliderValue} onSetMulti={handleSetMulti} onHandleOrder={handleOrder} onRow={row} onCol={col} onSetRow={setRow} onSetCol={setCol} onOption={option} onHandleSetOption={handleSetOption} onSizeSubmit={handleSizeSubmit} handleSetAlgorithm={handleSetAlgorithm} algorithm={algorithm} />
+      <Grid onSliderValue={sliderValue} ref={gridRef} onMulti={multi} row={row} col={col} onOption={option} onAlgorithm={algorithm} />
       <Log></Log>
     </div>
   );

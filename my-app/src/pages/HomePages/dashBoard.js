@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Slider from 'rc-slider';
+import 'rc-slider/assets/index.css';
 import '../../css/dashboard.css'
 const Dashboard = (props) => {
   const [xLimit, setXLimit] = useState(100);
@@ -167,7 +169,16 @@ const Dashboard = (props) => {
           </div>
         </div>
       </div>
-
+      <div className='slider-container'>
+        <Slider
+          min={1} // Minimum value of the slider
+          max={100} // Maximum value of the slider
+          step={1} // Step value for each increment/decrement
+          value={props.onSliderValue} // Current value of the slider
+          onChange={props.onSetSliderValue} // Event handler for slider value change
+        />
+        <span>{props.onSliderValue}</span> {/* Display the current slider value */}
+      </div>
       <div>
         <button id="clearButton" onClick={props.onHandleOrder}>Clear</button>
         <button id="animateButton" onClick={props.onHandleOrder}>Animate</button>

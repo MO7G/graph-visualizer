@@ -18,89 +18,42 @@ function create2DArray(rows, cols) {
 }
 
 const BfsHelper = (gridData, type) => {
-    if (type != "multi-bfs") {
-        let path = [];
-        let shortestPath = [];
-        let vis = create2DArray(gridData.row, gridData.col);
-        let parent = create2DArray(gridData.row, gridData.col);
-        let grid = gridData.realGrid;
-        let xStart = gridData.source[0];
-        let yStart = gridData.source[1];
-        let xEnd = gridData.target[0];
-        let yEnd = gridData.target[1];
-        let row = gridData.row;
-        let col = gridData.col;
-        let counter = 0;
-        console.log(xEnd, yEnd);
-        Bfs(xStart, yStart, xEnd, yEnd, row, col, counter, vis, grid, path, parent);
-        constructShortestPath(xEnd, yEnd, parent, shortestPath)
-        path.shift();
-        path.pop();
-        console.log(path)
-        return [path, shortestPath];
-    } else {
-        let path = [];
-        let shortestPath = [];
-        let vis = create2DArray(gridData.row, gridData.col);
-        let parent = create2DArray(gridData.row, gridData.col);
-        let grid = gridData.realGrid;
-        let multiStart = gridData.source;
-        let xEnd = gridData.target[0];
-        let yEnd = gridData.target[1];
-        let row = gridData.row;
-        let col = gridData.col;
-        BfsForMulti(multiStart, xEnd, yEnd, row, col, vis, grid, path, parent, shortestPath);
-        constructShortestPath(xEnd, yEnd, parent, shortestPath)
-        // path.shift();
-        //  path.pop();
-        // console.log(path)
+    let path = [];
+    let shortestPath = [];
+    let vis = create2DArray(gridData.row, gridData.col);
+    let parent = create2DArray(gridData.row, gridData.col);
+    let grid = gridData.realGrid;
+    let multiSource = gridData.source
+    let xEnd = gridData.target[0];
+    let yEnd = gridData.target[1];
+    let row = gridData.row;
+    let col = gridData.col;
+    Bfs(multiSource, xEnd, yEnd, row, col, vis, grid, path, parent, type);
+    constructShortestPath(xEnd, yEnd, parent, shortestPath)
+    return [path, shortestPath];
 
-        return [path, shortestPath];
-    }
 };
 
-const BfsForMulti = (multiStart, xEnd, yEnd, row, col, vis, grid, path, parent, shortestPath) => {
+
+const Bfs = (multiSource, xEnd, yEnd, row, col, vis, grid, path, parent, type) => {
     let queue = [];
     let flag = true;
-    for (let i = 0; i < multiStart.length; i++) {
-        let xStart = multiStart[i][0];
-        let yStart = multiStart[i][1];
+    let xStart, yStart;
+    if (type == "multi-bfs") {
+        for (let i = 0; i < multiSource.length; i++) {
+            xStart = multiSource[i][0];
+            yStart = multiSource[i][1];
+            vis[xStart][yStart] = 1;
+            queue.push([xStart, yStart]);
+        }
+    } else {
+        xStart = multiSource[0][0];
+        yStart = multiSource[0][1];
         vis[xStart][yStart] = 1;
         queue.push([xStart, yStart]);
     }
 
-    while (queue.length !== 0) {
-        let sz = queue.length;
-        for (let i = 0; i < sz; i++) {
-            let x, y;
-            x = queue[0][0];
-            y = queue[0][1];
-            queue.shift();
-            if (flag) {
-                path.push([x, y]);
-            }
-            if (x === xEnd && y === yEnd) {
-                flag = false;
-            }
-            for (let k = 0; k < 4; k++) {
-                let newX = x + dx[k];
-                let newY = y + dy[k];
-                if (check(newX, newY, row, col) && !vis[newX][newY] && grid[newX][newY] !== -1 && flag) {
-                    queue.push([newX, newY]);
-                    vis[newX][newY] = 1;
-                    parent[newX][newY] = [x, y];
-                }
-            }
-        }
-    }
 
-}
-
-const Bfs = (xStart, yStart, xEnd, yEnd, row, col, counter, vis, grid, path, parent) => {
-    let queue = [];
-    vis[xStart][yStart] = 1;
-    let flag = true;
-    queue.push([xStart, yStart])
     while (queue.length !== 0) {
         let sz = queue.length;
         for (let i = 0; i < sz; i++) {

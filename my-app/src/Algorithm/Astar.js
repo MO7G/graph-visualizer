@@ -180,12 +180,20 @@ const AStarHelper = (gridData) => {
     let row = gridData.row;
     let col = gridData.col;
     let grid = create2DArray(row, col, realGrid);
-    let xStart = gridData.source[0];
-    let yStart = gridData.source[1];
+    let xStart = gridData.source[0][0];
+    let yStart = gridData.source[0][1];
     let xEnd = gridData.target[0];
     let yEnd = gridData.target[1];
     const path = aStarSearch(grid, grid[xStart][yStart], grid[xEnd][yEnd]);
-    return [path, []];
+    let backTrack
+    if (path !== null) {
+        let backTrack = [...path];
+        backTrack.reverse();
+        return [path, backTrack];
+    } else {
+        return [null];
+    }
+
 };
 
 

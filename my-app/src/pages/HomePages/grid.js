@@ -6,20 +6,18 @@ import BfsHelper from '../../Algorithm/BFS'
 import DijHelper from '../../Algorithm/dijkstra';
 import mazeGenerator from '../../Algorithm/Testing/mazeGenerator'
 import AStarHelper from '../../Algorithm/Astar';
-import Slider from 'rc-slider';
-import 'rc-slider/assets/index.css';
+
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
 const Grid = React.forwardRef((props, ref) => {
-  let cellDim = 0.5
   const [mouseClicked, setMouseClicked] = useState(false);
   const [gridNumbers, setGridNumbers] = useState([]);
-  const [sliderValue, setSliderValue] = useState(60); // Default value of 60
   const [weightAllowed, setWeightAllowed] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
-
+  const [cellDim, setCellDim] = useState(2);
+  const [okay, setOkay] = useState(13);
   useImperativeHandle(ref, () => ({
     handleOrder,
     clearGrid
@@ -78,9 +76,6 @@ const Grid = React.forwardRef((props, ref) => {
 
 
   }
-  const handleSliderChange = (value) => {
-    setSliderValue(value); // Update the slider value when it changes
-  };
 
   const handleCellClick = (event) => {
     let algorithm = props.onAlgorithm
@@ -176,8 +171,8 @@ const Grid = React.forwardRef((props, ref) => {
         }
 
         if (div.contains('source')) {
-          source[0] = i;
-          source[1] = j;
+
+          source.push([i, j])
         }
 
         if (div.contains('target')) {
@@ -255,24 +250,11 @@ const Grid = React.forwardRef((props, ref) => {
     return gridData
   }
 
-  const something = () => {
-    const cell = Array.from(document.getElementsByClassName('cell'))
-    const cellWeight = Array.from(document.getElementsByClassName('grid-number'))
+  const something = async () => {
 
-    let source = [];
-    let target = [];
-    let realGrid = [];
-    let row = props.row;
-    let col = props.col;
-    for (let i = 0; i < row; i++) {
-      let row = [];
-      for (let j = 0; j < col; j++) {
-        let div = cell[i * col + j].classList;
+  };
 
-      }
 
-    }
-  }
   const checkSourceAndTarget = () => {
     let flag = true;
     const source = document.querySelector('.source')
@@ -291,19 +273,22 @@ const Grid = React.forwardRef((props, ref) => {
   }
 
   const draw = (path) => {
-    let fps = 0.7
     const cellElements = Array.from(document.getElementsByClassName('cell'));
-    const duration = fps * path[0].length; // Total duration of the first loop
+    const duration = props.onSliderValue * path[0].length; // Total duration of the first loop
     const delay = duration / path[0].length; // Delay between frames based on fps and path length
-    console.log("this is it ", path[0].length);
     const animateFirstLoop = () => {
       return new Promise((resolve) => {
+        if (path[0].length === 0) {
+          resolve();
+        }
+
         for (let i = 0; i < path[0].length; i++) {
           const [row, col] = path[0][i];
           const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
 
           setTimeout(() => {
 
+            document.querySelector('.rc-slider-handle').getAttribute('aria-valuenow')
             if (cell.classList.contains('target') || cell.classList.contains('source')) {
 
             } else {
@@ -319,32 +304,40 @@ const Grid = React.forwardRef((props, ref) => {
     };
 
 
+
     const animateSecondLoop = () => {
       return new Promise((resolve) => {
-        path[1].forEach((position, index) => {
-          const [row, col] = position;
-          const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+        if (path[1].length <= 1) {
+          resolve();
+        } else {
+          path[1].forEach((position, index) => {
+            const [row, col] = position;
+            const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
 
-          // Add a delay to the animation
-          setTimeout(() => {
+            // Add a delay to the animation
+            setTimeout(() => {
 
-            // cell.classList.add('done');
-            if (cell.classList.contains('target') || cell.classList.contains('source')) {
+              // cell.classList.add('done');
+              if (cell.classList.contains('target') || cell.classList.contains('source')) {
 
-            } else {
-              cell.classList.add('done');
-            }
-            if (index === path[1].length - 1) {
-              resolve(); // Resolve the promise when the second loop finishes
-            }
-          }, delay * index); // Adjust the delay based on fps and path length
-        });
+              } else {
+                cell.classList.add('done');
+              }
+              if (index === path[1].length - 1) {
+                resolve(); // Resolve the promise when the second loop finishes
+              }
+            }, delay * index); // Adjust the delay based on fps and path length
+          });
+        }
       });
     };
 
     animateFirstLoop()
       .then(animateSecondLoop).then(() => {
         handleToastProcessing("", "destroy");
+        if (path[1].length <= 1) {
+          handleToastProcessing(props.onAlgorithm, "no-path");
+        }
         handleToastProcessing(props.onAlgorithm, "success");
       })
       .catch((error) => {
@@ -371,6 +364,8 @@ const Grid = React.forwardRef((props, ref) => {
   }
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  // const delay = () => new Promise((resolve) => setTimeout(resolve, 0));
+
 
   const handleToastProcessing = (algorithm, reason) => {
     if (algorithm == 'dij') {
@@ -383,6 +378,8 @@ const Grid = React.forwardRef((props, ref) => {
       algorithm = "A * Search"
     } else if (algorithm == 'multi-bfs') {
       algorithm = "Multiple Breadth first Search"
+    } else if (algorithm == 'multi-dij') {
+      algorithm = "Multiple Dijkstra"
     }
 
     if (reason == "processing") {
@@ -404,6 +401,8 @@ const Grid = React.forwardRef((props, ref) => {
       toast.error("Source and Target are not set");
     } else if (reason == "many-sources") {
       toast.error("Remove extra Sources");
+    } else if (reason == "no-path") {
+      toast.info(`${algorithm} can't find a path`)
     }
   }
 
@@ -448,7 +447,7 @@ const Grid = React.forwardRef((props, ref) => {
           let animation = await DfsHelper(object);
           handleToastProcessing("", "destroy");
           handleToastProcessing("", "pathFinding")
-          draw(animation, 100);
+          draw(animation);
         } else {
           handleToastProcessing("", "many-sources")
         }
@@ -459,15 +458,15 @@ const Grid = React.forwardRef((props, ref) => {
         let animation = await BfsHelper(object);
         handleToastProcessing("", "destroy");
         handleToastProcessing("", "pathFinding")
-        draw(animation, 100);
+        draw(animation);
       } else if (algorithm === 'dij') {
         let object = handleGridDTS(props.row, props.col);
         handleToastProcessing("dij", "processing")
         await delay(50);
-        let animation = await DijHelper(object);
+        let animation = await DijHelper(object, "njn");
         handleToastProcessing("", "destroy");
         handleToastProcessing("", "pathFinding")
-        draw(animation, 100);
+        draw(animation);
       } else if (algorithm === 'bellman-ford') {
 
       } else if (algorithm === 'Astar') {
@@ -481,18 +480,27 @@ const Grid = React.forwardRef((props, ref) => {
         } else {
           handleToastProcessing("", "destroy");
           handleToastProcessing("", "pathFinding")
-          console.log(animation)
-          draw(animation, 100);
+
+          draw(animation);
         }
       } else if (algorithm === 'multi-bfs') {
         let object = handleGridDtsForMultiSource(props.row, props.col);
         handleToastProcessing("mutli-bfs", "processing")
         await delay(50);
         let animation = await BfsHelper(object, "multi-bfs");
-        console.log(animation)
         handleToastProcessing("", "destroy");
         handleToastProcessing("", "pathFinding")
-        draw(animation, 100);
+        draw(animation);
+      } else if (algorithm === 'multi-dij') {
+        let object = handleGridDTS(props.row, props.col);
+        handleToastProcessing("mutli-bfs", "processing")
+        await delay(50);
+        let animation = await DijHelper(object, "multi-dij");
+        console.log(animation);
+
+        handleToastProcessing("", "destroy");
+        handleToastProcessing("", "pathFinding")
+        draw(animation);
       }
 
     }
@@ -650,25 +658,14 @@ const Grid = React.forwardRef((props, ref) => {
 
   return (
 
-    <div>
-      <button onClick={testing} disabled={buttonDisabled}>test me</button>
+    < div >
 
+      <button onClick={testing} disabled={buttonDisabled}>test me</button>
       {generateGrid()}
       <h1>{props.onAlgorithm}</h1>
       <h1>{props.onOption}</h1>
       <h1>{props.onMulti}</h1>
-      <div className='slider-container'>
-        <Slider
-          min={1} // Minimum value of the slider
-          max={60} // Maximum value of the slider
-          step={1} // Step value for each increment/decrement
-          value={sliderValue} // Current value of the slider
-          onChange={handleSliderChange} // Event handler for slider value change
-        />
-        <span>{sliderValue}</span> {/* Display the current slider value */}
-      </div>
-
-
+      <button onClick={something}>something</button>
     </div >
   );
 });

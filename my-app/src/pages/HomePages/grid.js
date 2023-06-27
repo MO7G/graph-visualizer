@@ -304,7 +304,8 @@ const Grid = React.forwardRef((props, ref) => {
             if (i === path[0].length - 1) {
               resolve(); // Resolve the promise when the first loop finishes
             }
-            console.log("ues")
+
+
           }, delay * i); // Adjust the delay based on fps and path length
         }
       });
@@ -452,7 +453,8 @@ const Grid = React.forwardRef((props, ref) => {
           handleToastProcessing("dij", "processing")
           await delay(50);
           let animation = await DfsHelper(object);
-
+          props.handleSetLogMessage(animation[2]);
+          // console.log(animation[2])
           handleToastProcessing("", "destroy");
           handleToastProcessing("", "pathFinding")
           draw(animation);
@@ -477,11 +479,11 @@ const Grid = React.forwardRef((props, ref) => {
         let numberOfSources = checkNumberOfSource();
         if (numberOfSources) {
           let object = handleGridDTS(props.row, props.col);
-          console.log(object)
+
           handleToastProcessing("dij", "processing")
           await delay(50);
           let animation = await DijHelper(object, "njn");
-          console.log(animation)
+
           handleToastProcessing("", "destroy");
           handleToastProcessing("", "pathFinding")
           draw(animation);
@@ -523,7 +525,7 @@ const Grid = React.forwardRef((props, ref) => {
         handleToastProcessing("mutli-bfs", "processing")
         await delay(50);
         let animation = await DijHelper(object, "multi-dij");
-        console.log(animation);
+
 
         handleToastProcessing("", "destroy");
         handleToastProcessing("", "pathFinding")

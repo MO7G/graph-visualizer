@@ -1,0 +1,139 @@
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.first-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px; /* Add margin at the bottom */
+}
+
+.operation-container {
+  display: flex;
+  justify-content: space-between;
+  background-color: black;
+  color: red;
+  margin-bottom: 10px; /* Add margin at the bottom */
+  width: 60vh;
+  font-size: 25px;
+  margin: 20px ;    
+}
+
+.algorithms-div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+  color: red;
+  background-color: black;
+  width: 90vmax;
+  font-size: 25px;
+  margin: 20px ;    
+}
+
+    
+.second-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+
+
+
+
+
+.row-col-form{
+
+   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px; /* Add margin at the bottom */
+  width: 40vw;
+  height: 10vh;
+  font-size: 20px;
+}
+
+
+
+form {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 50vh;
+}
+
+
+
+.row-col-form input[type="number"] {
+  padding: 5px;
+  margin-right: 10px;
+  height: 62px;
+  width: 203px;
+
+}
+
+.row-col-form button[type="submit"] {
+  padding: 5px;
+  height: 62px;
+  width: 203px;
+   height: 62px;
+  width: 203px;
+  border: none;
+  cursor: pointer;
+  background-color: red;
+  margin-left: 10px;
+  color: white;
+}
+.row-col-form button[type="submit"]:hover{
+  background-color: white;;
+  transition: 0.5s all;
+  color: black;
+}
+
+.slider span {
+  margin-left: 10px;
+  background-color: red;
+}
+.rc-slider-track{
+background-color: red;
+}
+.rc-slider-track{
+    background-color: red   ;
+}
+.rc-slider-handle{
+    background-color: red;
+}
+.rc-slider-handle-dragging.rc-slider-handle-dragging.rc-slider-handle-dragging {
+  border-color: red;
+  box-shadow: 0 0 0 5px red;
+}
+.second-section-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.second-section-buttons button {
+   padding: 5px;
+  height: 62px;
+  width: 203px;
+  background-color: #f0f0f0;
+  border: none;
+  cursor: pointer;
+  background-color: red;
+  margin-left: 10px;
+  color: white;
+}
+
+.second-section-buttons button:hover{
+  background-color: white;
+  transition: 0.5s all;
+  color: black;
+}

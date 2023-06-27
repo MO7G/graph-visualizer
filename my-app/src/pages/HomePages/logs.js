@@ -34,7 +34,7 @@ const Log = React.forwardRef((props, ref) => {
             key={index}
             style={{
               boxShadow: index === info.length - 1 ? 'none' : '0px 0px 0px #888888',
-              color: index === info.length - 1 ? '#000000' : '#888888',
+              color: index === info.length - 1 ? '#F0F0F0' : '#888888',
               marginBottom: '8px' // Add this line to add spacing between paragraphs
             }}
           >

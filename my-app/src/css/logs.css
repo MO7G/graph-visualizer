@@ -3,17 +3,19 @@
   justify-content: center;
   margin-left: 10px; /* Adjust the left margin as needed */
   margin-right: 10px; /* Adjust the right margin as needed */
+  background-color: #222831 !important;
+
 }
 
 .scrollable-div {
   width: 100vw;
   height: 200px;
   overflow-y: auto;
-  border: 1px solid #ccc;
   scrollbar-width: thin;
   scrollbar-color: #888888 #f0f0f0;
   transition: scroll-behavior 0.5s; /* Add a transition effect to the scroll behavior */
   margin-top: 10px; /* Adjust the top margin as needed */
+    
 }
 
 .scrollable-div::-webkit-scrollbar {

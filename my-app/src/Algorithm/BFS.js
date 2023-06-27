@@ -28,14 +28,21 @@ const BfsHelper = (gridData, type) => {
     let yEnd = gridData.target[1];
     let row = gridData.row;
     let col = gridData.col;
-    Bfs(multiSource, xEnd, yEnd, row, col, vis, grid, path, parent, type);
-    constructShortestPath(xEnd, yEnd, parent, shortestPath)
-    return [path, shortestPath];
+    let walls = gridData.walls
+    let discoveries = {
+        couneter: 0,
+        path: 0
+    }
+    Bfs(multiSource, xEnd, yEnd, row, col, vis, grid, path, parent, type, discoveries);
+    constructShortestPath(xEnd, yEnd, parent, shortestPath, discoveries)
+    let message = setMessage(discoveries, row, col, walls);
+
+    return [path, shortestPath, message];
 
 };
 
 
-const Bfs = (multiSource, xEnd, yEnd, row, col, vis, grid, path, parent, type) => {
+const Bfs = (multiSource, xEnd, yEnd, row, col, vis, grid, path, parent, type, discoveries) => {
     let queue = [];
     let flag = true;
     let xStart, yStart;
@@ -45,12 +52,14 @@ const Bfs = (multiSource, xEnd, yEnd, row, col, vis, grid, path, parent, type) =
             yStart = multiSource[i][1];
             vis[xStart][yStart] = 1;
             queue.push([xStart, yStart]);
+            discoveries.couneter++;
         }
     } else {
         xStart = multiSource[0][0];
         yStart = multiSource[0][1];
         vis[xStart][yStart] = 1;
         queue.push([xStart, yStart]);
+        discoveries.couneter++;
     }
 
 
@@ -63,6 +72,7 @@ const Bfs = (multiSource, xEnd, yEnd, row, col, vis, grid, path, parent, type) =
             queue.shift();
             if (flag) {
                 path.push([x, y]);
+                discoveries.couneter++;
             }
             if (x === xEnd && y === yEnd) {
                 flag = false;
@@ -73,6 +83,7 @@ const Bfs = (multiSource, xEnd, yEnd, row, col, vis, grid, path, parent, type) =
                 if (check(newX, newY, row, col) && !vis[newX][newY] && grid[newX][newY] !== -1 && flag) {
                     queue.push([newX, newY]);
                     vis[newX][newY] = 1;
+
                     parent[newX][newY] = [x, y];
                 }
             }
@@ -80,7 +91,7 @@ const Bfs = (multiSource, xEnd, yEnd, row, col, vis, grid, path, parent, type) =
     }
 }
 
-const constructShortestPath = (xEnd, yEnd, parent, shortestPath) => {
+const constructShortestPath = (xEnd, yEnd, parent, shortestPath, discoveries) => {
     console.log(shortestPath)
     let currentX = xEnd;
     let currentY = yEnd;
@@ -90,6 +101,7 @@ const constructShortestPath = (xEnd, yEnd, parent, shortestPath) => {
         if (parents) {
             currentX = parents[0];
             currentY = parents[1];
+            discoveries.path++;
         } else {
             // No path found, return empty shortest path
             shortestPath = [];
@@ -99,6 +111,36 @@ const constructShortestPath = (xEnd, yEnd, parent, shortestPath) => {
     shortestPath.shift();
 }
 
+
+
+const setMessage = (discoveries, row, col, walls) => {
+    let Name = "Breadth First Search";
+    let complexity = "O(N x M)"
+    let discovered = discoveries.couneter;
+    let TotalSize = row * col;
+    let PathLength = discoveries.path;
+    let percentage = (discovered / TotalSize) * 100;
+    let ValidWalls = TotalSize - walls;
+    let Classification;
+    if (discovered == 2) {
+        Classification = "Best case"
+    } else if (discovered - ValidWalls == 0) {
+        Classification = "Worst case"
+    } else {
+        Classification = "Average case"
+    }
+    const Message = `
+Name: ${Name}
+Time Complexity: ${complexity}
+TotalSize: ${TotalSize}
+walls:${walls}
+Discovered: ${discovered}
+PathLength: ${PathLength}
+Work done : ${percentage}%
+Classification:${Classification}
+`;
+    return Message
+}
 export default BfsHelper;
 
 

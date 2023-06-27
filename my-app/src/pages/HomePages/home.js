@@ -5,16 +5,18 @@ import Log from './logs';
 import '../../css/home.css'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { v4 as uuidv4 } from 'uuid';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+
 const HomePage = () => {
-  const [row, setRow] = useState(10);
-  const [col, setCol] = useState(10);
+  const [row, setRow] = useState(20);
+  const [col, setCol] = useState(50);
   const [option, setOption] = useState('Wall');
   const [algorithm, setAlgorithm] = useState('dfs');
   const [multi, setMulti] = useState(false)
   const [sliderValue, setSliderValue] = useState(0.5); // Default value of 60
   const [logMessage, setLogMessage] = useState('');
-  const randomKey = uuidv4();
   const gridRef = useRef();
   const logRef = useRef();
   const [key, setKey] = useState(0);
@@ -65,14 +67,23 @@ const HomePage = () => {
     setLogMessage(info);
   }
   return (
-    <div className='home'>
-      <h1>Home Page</h1>
-      <ToastContainer />
-      <Dashboard onSliderValue={sliderValue} onSetSliderValue={hanldeSetSliderValue} onSetMulti={handleSetMulti} onHandleOrder={handleOrder} onRow={row} onCol={col} onSetRow={setRow} onSetCol={setCol} onOption={option} onHandleSetOption={handleSetOption} onSizeSubmit={handleSizeSubmit} handleSetAlgorithm={handleSetAlgorithm} algorithm={algorithm} />
-      <Grid handleSetLogMessage={setLogMessage} onSliderValue={sliderValue} ref={gridRef} onMulti={multi} row={row} col={col} onOption={option} onAlgorithm={algorithm} />
-      <Log key={key} ref={logRef} onLogMessage={logMessage}></Log>
-      <div className='size' style={{ height: '1000px ' }}></div>
-    </div >
+
+    <Container fluid  >
+      <Row>
+        <Col> <div className='home'>
+          <div className='header'>
+            <h1>Home Page</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptas corrupti ipsa accusantium qui totam, nihil sit officiis. Doloribus, quibusdam? Quae placeat tempore dolorem? Suscipit tenetur fugit enim ipsum! Optio, quidem?</p>
+          </div>
+          <ToastContainer />
+          <Dashboard onSliderValue={sliderValue} onSetSliderValue={hanldeSetSliderValue} onSetMulti={handleSetMulti} onHandleOrder={handleOrder} onRow={row} onCol={col} onSetRow={setRow} onSetCol={setCol} onOption={option} onHandleSetOption={handleSetOption} onSizeSubmit={handleSizeSubmit} handleSetAlgorithm={handleSetAlgorithm} algorithm={algorithm} />
+          <Grid handleSetLogMessage={setLogMessage} onSliderValue={sliderValue} ref={gridRef} onMulti={multi} row={row} col={col} onOption={option} onAlgorithm={algorithm} />
+          <Log key={key} ref={logRef} onLogMessage={logMessage}></Log>
+          <div className='size' style={{ height: '1000px ' }}></div>
+        </div ></Col>
+      </Row>
+    </Container>
+
   );
 };
 

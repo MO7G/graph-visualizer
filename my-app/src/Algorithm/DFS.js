@@ -29,6 +29,7 @@ const DfsHelper = (gridData) => {
   let yEnd = gridData.target[1];
   let row = gridData.row;
   let col = gridData.col;
+  let walls = gridData.walls
   let discoveries = {
     couneter: 0,
     path: 0
@@ -36,35 +37,37 @@ const DfsHelper = (gridData) => {
   let shortestPath = dfs(xStart, yStart, xEnd, yEnd, row, col, vis, grid, path, discoveries);
   path.shift();
   path.pop();
-  let message = setMessage(discoveries, row, col);
+  let message = setMessage(discoveries, row, col, walls);
 
   return [path, shortestPath, message];
 };
 
 
-const setMessage = (discoveries, row, col) => {
+const setMessage = (discoveries, row, col, walls) => {
   let Name = "Depth First Search";
   let complexity = "O(N x M)"
   let discovered = discoveries.couneter;
   let TotalSize = row * col;
   let PathLength = discoveries.path;
   let percentage = (discovered / TotalSize) * 100;
+  let ValidWalls = TotalSize - walls;
   let Classification;
-  if (percentage == 2) {
+  if (discovered == 2) {
     Classification = "Best case"
-  } else if (percentage > 0 && percentage < 100) {
-    Classification = "Average case"
-  } else {
+  } else if (discovered - ValidWalls == 0) {
     Classification = "Worst case"
+  } else {
+    Classification = "Average case"
   }
   const Message = `
 Name: ${Name}
 Time Complexity: ${complexity}
-Discovered: ${discovered}
 TotalSize: ${TotalSize}
+walls:${walls}
+Discovered: ${discovered}
 PathLength: ${PathLength}
 Work done : ${percentage}%
-Classification:${Classification}
+Classification:${Classification}  
 `;
   return Message
 }
@@ -77,19 +80,22 @@ const dfs = (xStart, yStart, xEnd, yEnd, row, col, vis, grid, path, discoveries)
   while (stack.length > 0) {
     let [x, y] = stack.pop();
     path.push([x, y]);
-    discoveries.couneter++;
+    if (!vis[x][y]) {
+      discoveries.couneter++;
+    }
     if (x === xEnd && y === yEnd) {
 
       return constructShortestPath(parent, xStart, yStart, xEnd, yEnd, discoveries);
     }
-
     vis[x][y] = 1;
+
 
     for (let i = 0; i < 4; i++) {
       let newX = dx[i] + x;
       let newY = dy[i] + y;
       if (check(newX, newY, row, col) && !vis[newX][newY] && grid[newX][newY] !== -1) {
         stack.push([newX, newY]);
+
         parent[newX][newY] = [x, y];
       }
     }
@@ -108,10 +114,12 @@ const constructShortestPath = (parent, xStart, yStart, xEnd, yEnd, discoveries) 
     let [prevX, prevY] = parent[currentX][currentY];
     currentX = prevX;
     currentY = prevY;
+    discoveries.path++;
 
   }
 
   shortestPath.push([xStart, yStart]);
+  discoveries.path++;
   shortestPath.reverse(); // Reverse the path to get the correct order
 
   return shortestPath;

@@ -16,7 +16,7 @@ const Grid = React.forwardRef((props, ref) => {
   const [gridNumbers, setGridNumbers] = useState([]);
   const [weightAllowed, setWeightAllowed] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
-  const [cellDim, setCellDim] = useState(1);
+  const [cellDim, setCellDim] = useState(0.4);
   const [okay, setOkay] = useState(13);
   useImperativeHandle(ref, () => ({
     handleOrder,
@@ -161,7 +161,7 @@ const Grid = React.forwardRef((props, ref) => {
     let source = [];
     let target = [];
     let realGrid = [];
-
+    let walls = 0;
     for (let i = 0; i < row; i++) {
       let row = [];
       for (let j = 0; j < col; j++) {
@@ -187,6 +187,7 @@ const Grid = React.forwardRef((props, ref) => {
 
         if (div.contains('wall')) {
           row.push(-1);
+          walls++;
         } else {
           row.push(0);
         }
@@ -200,7 +201,8 @@ const Grid = React.forwardRef((props, ref) => {
       target,
       algorithm,
       row,
-      col
+      col,
+      walls
     };
     return gridData
   }
@@ -468,6 +470,7 @@ const Grid = React.forwardRef((props, ref) => {
           handleToastProcessing("dij", "processing")
           await delay(50);
           let animation = await BfsHelper(object);
+          props.handleSetLogMessage(animation[2]);
           handleToastProcessing("", "destroy");
           handleToastProcessing("", "pathFinding")
           draw(animation);
@@ -513,10 +516,11 @@ const Grid = React.forwardRef((props, ref) => {
           handleToastProcessing("", "many-sources")
         }
       } else if (algorithm === 'multi-bfs') {
-        let object = handleGridDtsForMultiSource(props.row, props.col);
+        let object = handleGridDTS(props.row, props.col);
         handleToastProcessing("mutli-bfs", "processing")
         await delay(50);
         let animation = await BfsHelper(object, "multi-bfs");
+        props.handleSetLogMessage(animation[2]);
         handleToastProcessing("", "destroy");
         handleToastProcessing("", "pathFinding")
         draw(animation);
@@ -687,14 +691,8 @@ const Grid = React.forwardRef((props, ref) => {
 
   return (
 
-    < div >
-
-      <button onClick={testing} disabled={buttonDisabled}>test me</button>
+    < div className='grid' >
       {generateGrid()}
-      <h1>{props.onAlgorithm}</h1>
-      <h1>{props.onOption}</h1>
-      <h1>{props.onMulti}</h1>
-      <button onClick={something}>something</button>
     </div >
   );
 });

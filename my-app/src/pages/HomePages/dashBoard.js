@@ -28,8 +28,7 @@ const Dashboard = (props) => {
   return (
     <div className='dashboard-container'>
 
-      < div className='dashboard-container'>
-        <h2>Dashboard</h2>
+      < div className='first-section'>
         <div className='operation-container'>
           <div className='radio-container'>
             <input
@@ -74,18 +73,7 @@ const Dashboard = (props) => {
 
         </div>
 
-        <form onSubmit={handleSubmit}>
-          <label>
-            Rows:
-            <input type="number" name='row' required min="1" max="300" />
-          </label>
-          <label>
-            Columns:
-            <input type="number" name='col' required min="1" max="300" />
-          </label>
 
-          <button type="submit">Submit</button>
-        </form>
         <div className='algorithms-div'>
           <div>
             <input
@@ -169,24 +157,44 @@ const Dashboard = (props) => {
           </div>
         </div>
       </div>
-      <div className='slider-container'>
-        <Slider
-          min={1} // Minimum value of the slider
-          max={100} // Maximum value of the slider
-          step={1} // Step value for each increment/decrement
-          value={props.onSliderValue} // Current value of the slider
-          onChange={props.onSetSliderValue} // Event handler for slider value change
-        />
-        <span>{props.onSliderValue}</span> {/* Display the current slider value */}
+
+      <div className='second-section'>
+        <div className='row-col-form'>
+          <form onSubmit={handleSubmit}>
+            <label>
+
+              <input type="number" placeholder='Row' name='row' required min="1" max="300" />
+            </label>
+            <label>
+              <input type="number" placeholder='Column' name='col' required min="1" max="300" />
+            </label>
+
+            <button type="submit">Submit</button>
+          </form>
+        </div>
+        <div className='slider-container'>
+          <div className='slider'>
+            <Slider
+              min={1} // Minimum value of the slider
+              max={100} // Maximum value of the slider
+              step={1} // Step value for each increment/decrement
+              value={props.onSliderValue} // Current value of the slider
+              onChange={props.onSetSliderValue} // Event handler for slider value change
+            />
+            <span>{/*props.onSliderValue*/}</span> {/* Display the current slider value */}
+          </div>
+        </div>
+
+        <div className='second-section-buttons'>
+          <button id="clearButton" onClick={props.onHandleOrder}>Clear</button>
+          <button id="animateButton" onClick={props.onHandleOrder}>Animate</button>
+          <button id="kurskalMazeButton" onClick={props.onHandleOrder}>Kurskal Maze</button>
+          <button id="randomMazeButton" onClick={props.onHandleOrder}>Random Maze</button>
+          <button id="positiveNumbersButton" onClick={props.onHandleOrder}>Positive Numbers</button>
+          <button id="negativeNumbersButton" onClick={props.onHandleOrder}>Negative Numbers</button>
+        </div>
       </div>
-      <div>
-        <button id="clearButton" onClick={props.onHandleOrder}>Clear</button>
-        <button id="animateButton" onClick={props.onHandleOrder}>Animate</button>
-        <button id="kurskalMazeButton" onClick={props.onHandleOrder}>Kurskal Maze</button>
-        <button id="randomMazeButton" onClick={props.onHandleOrder}>Random Maze</button>
-        <button id="positiveNumbersButton" onClick={props.onHandleOrder}>Positive Numbers</button>
-        <button id="negativeNumbersButton" onClick={props.onHandleOrder}>Negative Numbers</button>
-      </div>
+
 
 
 

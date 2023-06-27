@@ -1,0 +1,14 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center vertically */
+  align-items: center; /* Center horizontally */
+  color: white;
+  
+}
+.header p{
+  display: block;
+  min-width: 600px; /* Set a minimum width for the container */
+  max-width: 100vh;
+  margin: 0 auto; /* Center the container horizontally */
+}

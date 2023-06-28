@@ -16,7 +16,7 @@ const Grid = React.forwardRef((props, ref) => {
   const [gridNumbers, setGridNumbers] = useState([]);
   const [weightAllowed, setWeightAllowed] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
-  const [cellDim, setCellDim] = useState(0.4);
+  const [cellDim, setCellDim] = useState(2);
   const [okay, setOkay] = useState(13);
   useImperativeHandle(ref, () => ({
     handleOrder,
@@ -468,9 +468,11 @@ const Grid = React.forwardRef((props, ref) => {
         if (numberOfSources) {
           let object = handleGridDTS(props.row, props.col);
           handleToastProcessing("dij", "processing")
+          
           await delay(50);
           let animation = await BfsHelper(object);
           props.handleSetLogMessage(animation[2]);
+          console.log(animation[2])
           handleToastProcessing("", "destroy");
           handleToastProcessing("", "pathFinding")
           draw(animation);
@@ -486,7 +488,7 @@ const Grid = React.forwardRef((props, ref) => {
           handleToastProcessing("dij", "processing")
           await delay(50);
           let animation = await DijHelper(object, "njn");
-
+          props.handleSetLogMessage(animation[2]);
           handleToastProcessing("", "destroy");
           handleToastProcessing("", "pathFinding")
           draw(animation);
@@ -529,7 +531,9 @@ const Grid = React.forwardRef((props, ref) => {
         handleToastProcessing("mutli-bfs", "processing")
         await delay(50);
         let animation = await DijHelper(object, "multi-dij");
-
+        console.log(animation[2])
+        props.handleSetLogMessage(animation[2]);
+        
 
         handleToastProcessing("", "destroy");
         handleToastProcessing("", "pathFinding")

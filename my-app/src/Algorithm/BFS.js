@@ -30,10 +30,12 @@ const BfsHelper = (gridData, type) => {
     let col = gridData.col;
     let walls = gridData.walls
     let discoveries = {
-        couneter: 0,
-        path: 0
+        counter: 0,
+        path: 0,
+        visited:0
     }
     Bfs(multiSource, xEnd, yEnd, row, col, vis, grid, path, parent, type, discoveries);
+    console.log(discoveries.counter)
     constructShortestPath(xEnd, yEnd, parent, shortestPath, discoveries)
     let message = setMessage(discoveries, row, col, walls);
 
@@ -52,16 +54,15 @@ const Bfs = (multiSource, xEnd, yEnd, row, col, vis, grid, path, parent, type, d
             yStart = multiSource[i][1];
             vis[xStart][yStart] = 1;
             queue.push([xStart, yStart]);
-            discoveries.couneter++;
+            discoveries.counter++;
         }
     } else {
         xStart = multiSource[0][0];
         yStart = multiSource[0][1];
         vis[xStart][yStart] = 1;
         queue.push([xStart, yStart]);
-        discoveries.couneter++;
+        discoveries.counter++;
     }
-
 
     while (queue.length !== 0) {
         let sz = queue.length;
@@ -71,8 +72,8 @@ const Bfs = (multiSource, xEnd, yEnd, row, col, vis, grid, path, parent, type, d
             y = queue[0][1];
             queue.shift();
             if (flag) {
-                path.push([x, y]);
-                discoveries.couneter++;
+                path.push([x, y]);  
+                discoveries.counter++             
             }
             if (x === xEnd && y === yEnd) {
                 flag = false;
@@ -83,12 +84,13 @@ const Bfs = (multiSource, xEnd, yEnd, row, col, vis, grid, path, parent, type, d
                 if (check(newX, newY, row, col) && !vis[newX][newY] && grid[newX][newY] !== -1 && flag) {
                     queue.push([newX, newY]);
                     vis[newX][newY] = 1;
-
                     parent[newX][newY] = [x, y];
                 }
             }
         }
     }
+    // delete the first node from the counter 
+    discoveries.counter--;
 }
 
 const constructShortestPath = (xEnd, yEnd, parent, shortestPath, discoveries) => {
@@ -116,7 +118,7 @@ const constructShortestPath = (xEnd, yEnd, parent, shortestPath, discoveries) =>
 const setMessage = (discoveries, row, col, walls) => {
     let Name = "Breadth First Search";
     let complexity = "O(N x M)"
-    let discovered = discoveries.couneter;
+    let discovered = discoveries.counter;
     let TotalSize = row * col;
     let PathLength = discoveries.path;
     let percentage = (discovered / TotalSize) * 100;

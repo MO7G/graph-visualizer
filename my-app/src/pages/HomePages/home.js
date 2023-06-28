@@ -10,8 +10,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 const HomePage = () => {
-  const [row, setRow] = useState(20);
-  const [col, setCol] = useState(50);
+  const [row, setRow] = useState(10);
+  const [col, setCol] = useState(10);
   const [option, setOption] = useState('Wall');
   const [algorithm, setAlgorithm] = useState('dfs');
   const [multi, setMulti] = useState(false)

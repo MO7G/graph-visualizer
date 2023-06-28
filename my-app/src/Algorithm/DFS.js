@@ -31,7 +31,7 @@ const DfsHelper = (gridData) => {
   let col = gridData.col;
   let walls = gridData.walls
   let discoveries = {
-    couneter: 0,
+    counter: 0,
     path: 0
   }
   let shortestPath = dfs(xStart, yStart, xEnd, yEnd, row, col, vis, grid, path, discoveries);
@@ -46,7 +46,7 @@ const DfsHelper = (gridData) => {
 const setMessage = (discoveries, row, col, walls) => {
   let Name = "Depth First Search";
   let complexity = "O(N x M)"
-  let discovered = discoveries.couneter;
+  let discovered = discoveries.counter;
   let TotalSize = row * col;
   let PathLength = discoveries.path;
   let percentage = (discovered / TotalSize) * 100;
@@ -81,7 +81,7 @@ const dfs = (xStart, yStart, xEnd, yEnd, row, col, vis, grid, path, discoveries)
     let [x, y] = stack.pop();
     path.push([x, y]);
     if (!vis[x][y]) {
-      discoveries.couneter++;
+      discoveries.counter++;
     }
     if (x === xEnd && y === yEnd) {
 

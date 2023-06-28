@@ -35,6 +35,38 @@ const createParent = (rows, cols) => {
 }
 
 
+const setMessage = (discoveries, row, col, walls) => {
+    let Name = "Dijkstra Single Shortest Path";
+    let complexity = "O(N*M Log(N*M))"
+    let discovered = discoveries.counter;
+    let TotalSize = row * col;
+    let TotalCost = discoveries.cost;
+    let PathLength = discoveries.path;
+    let percentage = (discovered / TotalSize) * 100;
+    let ValidWalls = TotalSize - walls;
+    let Classification;
+    
+    if (discovered == 2) {
+      Classification = "Best case"
+    } else if (discovered - ValidWalls == 0) {
+      Classification = "Worst case"
+    } else {
+      Classification = "Average case"
+    }
+    const Message = `
+  Name: ${Name}
+  Time Complexity: ${complexity}
+  TotalSize: ${TotalSize}
+  TotalCost: ${TotalCost}
+  walls: ${walls}
+  Discovered: ${discovered}
+  PathLength: ${PathLength}
+  Work done : ${percentage}%
+  Classification:${Classification}  
+  `;
+    return Message
+  }
+
 const DijHelper = (gridData, type) => {
 
     let path = [];
@@ -49,9 +81,14 @@ const DijHelper = (gridData, type) => {
     let yEnd = gridData.target[1];
     let row = gridData.row;
     let col = gridData.col;
+    let walls = gridData.walls
+    let discoveries = {
+      counter: 0,
+      path: 0,
+      cost:0
+    }
 
-
-    dij(multiSource, row, col, dis, grid, path, parent, type, vis);
+    dij(multiSource, row, col, dis, grid, path, parent, type, vis,discoveries);
     let shortestPathArray = [];
     console.log(multiSource[0]);
     console.log(xEnd, yEnd)
@@ -60,15 +97,16 @@ const DijHelper = (gridData, type) => {
         for (let j = 0; j < col; j++) {
             rowString += parent[i][j] + ' ';
         }
-        console.log(rowString);
+       
     }
-    constructShortestPath(multiSource[0][0], multiSource[0][1], xEnd, yEnd, parent, shortestPathArray);
-    return [path, shortestPathArray]
+    constructShortestPath(multiSource[0][0], multiSource[0][1], xEnd, yEnd, parent, shortestPathArray,discoveries,grid);
+    let message = setMessage(discoveries, row, col, walls);
+    return [path, shortestPathArray,message ]
 
 
 };
 
-const dij = (multiSource, row, col, dis, grid, path, parent, type, vis) => {
+const dij = (multiSource, row, col, dis, grid, path, parent, type, vis,discoveries) => {
     const pq = new FastPriorityQueue();
     let xStart, yStart;
     if (type == "multi-dij") {
@@ -78,15 +116,17 @@ const dij = (multiSource, row, col, dis, grid, path, parent, type, vis) => {
             dis[xStart][yStart] = 0;
             pq.add([0, xStart, yStart]);
             vis[xStart][yStart] = 1;
+            discoveries.counter++;
         }
     } else {
         xStart = multiSource[0][0];
         yStart = multiSource[0][1];
         pq.add([0, xStart, yStart]);
         vis[xStart][yStart] = 1;
+        discoveries.counter++;
 
     }
-    let counter = 0;
+
 
     while (!pq.isEmpty()) {
         let obj = pq.peek();
@@ -99,6 +139,7 @@ const dij = (multiSource, row, col, dis, grid, path, parent, type, vis) => {
         }
         if (!vis[x][y]) {
             path.push([x, y]);
+            discoveries.counter++;
             vis[x][y] = 1;
         }
         for (let i = 0; i < 4; i++) {
@@ -108,7 +149,6 @@ const dij = (multiSource, row, col, dis, grid, path, parent, type, vis) => {
                 let newCost = w + grid[nx][ny];
                 if (newCost < dis[nx][ny]) {
                     dis[nx][ny] = newCost;
-                    console.log("yes")
                     parent[nx][ny] = [x, y];
                     pq.add([newCost, nx, ny]);
 
@@ -120,38 +160,21 @@ const dij = (multiSource, row, col, dis, grid, path, parent, type, vis) => {
     // console.log(counter);
 }
 
-const shortestPath = (xEnd, yEnd, parent) => {
-    let a = xEnd;
-    let b = yEnd;
-    const path = [[a, b]]; // Store the path coordinates in an array
-    while (a !== 0 || b !== 0) {
-        const tempA = parent[a][b][0];
-        const tempB = parent[a][b][1];
-        // Break the loop if the parent indices are invalid
-        if (tempA < 0 || tempB < 0) {
-            console.log("Invalid parent indices encountered.");
-            break;
-        }
-        console.log(a, b);
-        a = tempA;
-        b = tempB;
-        path.push([a, b]);
 
-    }
-    path.pop();
-    return path;
-};
 
-const constructShortestPath = (xStart, yStart, xEnd, yEnd, parent, shortestPath) => {
+const constructShortestPath = (xStart, yStart, xEnd, yEnd, parent, shortestPath,discoveries,grid) => {
     let currentX = xEnd;
     let currentY = yEnd;
     while (currentX !== xStart || currentY !== yStart) {
         shortestPath.push([currentX, currentY]);
+        discoveries.path++;
+        discoveries.cost = discoveries.cost + grid[currentX][currentY];
         let parents = parent[currentX][currentY];
         console.log(currentX, currentY, "-:", parent[currentX][currentY])
         if (parents) {
             currentX = parents[0];
             currentY = parents[1];
+            
         } else {
             // No path found, return empty shortest path
             shortestPath = [];

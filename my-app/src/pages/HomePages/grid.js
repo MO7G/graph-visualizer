@@ -4,7 +4,9 @@ import Dfs from '../../Algorithm/DFS'
 import DfsHelper from '../../Algorithm/DFS';
 import BfsHelper from '../../Algorithm/BFS'
 import DijHelper from '../../Algorithm/dijkstra';
+import greedyHelper from '../../Algorithm/greedy';
 import mazeGenerator from '../../Algorithm/Testing/mazeGenerator'
+import bellmanFordHelper from '../../Algorithm/bellmanFord';
 import AStarHelper from '../../Algorithm/Astar';
 
 import { toast } from 'react-toastify';
@@ -496,7 +498,21 @@ const Grid = React.forwardRef((props, ref) => {
 
         }
       } else if (algorithm === 'bellman-ford') {
+        let numberOfSources = checkNumberOfSource();
+        if (numberOfSources) {
+          let object = handleGridDTS(props.row, props.col);
 
+          handleToastProcessing("dij", "processing")
+          await delay(50);
+          let animation = await bellmanFordHelper(object, "njn");
+         // props.handleSetLogMessage(animation[2]);
+          handleToastProcessing("", "destroy");
+          handleToastProcessing("", "pathFinding")
+          draw(animation);
+        } else {
+          handleToastProcessing("", "many-sources")
+
+        }
       } else if (algorithm === 'Astar') {
         let numberOfSources = checkNumberOfSource();
         if (numberOfSources) {
@@ -516,7 +532,26 @@ const Grid = React.forwardRef((props, ref) => {
         } else {
           handleToastProcessing("", "many-sources")
         }
-      } else if (algorithm === 'multi-bfs') {
+      } else if (algorithm === 'greedy') {
+        let numberOfSources = checkNumberOfSource();
+        if (numberOfSources) {
+          let object = handleGridDTS(props.row, props.col);
+          handleToastProcessing("Astar", "processing")
+          await delay(50);
+          let animation = await greedyHelper(object);
+          toast.dismiss()
+          if (animation[0] === null) {
+            handleToastProcessing("Astar", "error");
+          } else {
+            handleToastProcessing("", "destroy");
+            handleToastProcessing("", "pathFinding")
+
+            draw(animation);
+          }
+        } else {
+          handleToastProcessing("", "many-sources")
+        }
+       } else if (algorithm === 'multi-bfs') {
         let object = handleGridDTS(props.row, props.col);
         handleToastProcessing("mutli-bfs", "processing")
         await delay(50);
@@ -601,8 +636,13 @@ const Grid = React.forwardRef((props, ref) => {
     for (let i = 0; i < props.row; i++) {
       const rowNumbers = [];
       for (let j = 0; j < props.col; j++) {
+        if(j ===  props.col-1){
         const randomNumber = Math.floor(Math.random() * 1999) - 999; // Generate random number between -999 and 999
         rowNumbers.push(randomNumber);
+        }else{
+          const randomNumber = Math.floor(Math.random() * 1999) - 999; // Generate random number between -999 and 999
+          rowNumbers.push(randomNumber);
+        }
       }
       numbers.push(rowNumbers);
     }

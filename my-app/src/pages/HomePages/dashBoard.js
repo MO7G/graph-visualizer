@@ -248,12 +248,12 @@ const Dashboard = (props) => {
         <div className='second-section-buttons'>
 
           <button id="clearButton" onClick={props.onHandleOrder}>Clear</button>
-          <button id="animateButton" onClick={props.onHandleOrder}>Animate</button>
+          <button id="animateButton" onClick={props.onHandleOrder}>Play</button>
           <button id="kurskalMazeButton" onClick={props.onHandleOrder}>Kurskal Maze</button>
           <button id="randomMazeButton" onClick={props.onHandleOrder}>Random Maze</button>
           <button id="positiveNumbersButton" onClick={props.onHandleOrder}>Positive Numbers</button>
           <button id="negativeNumbersButton" onClick={props.onHandleOrder}>Negative Numbers</button>
-          <button id='modeButton' onClick={props.onHandleSetMode}>{props.onMode ? 'Educationl Mode' : 'Show Mode'}</button>
+          <button id='modeButton' onClick={props.onHandleSetMode}>{props.onMode ? 'Show Mode' : 'Educationl Mode'}</button>
         </div>
       </div>
 

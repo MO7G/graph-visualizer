@@ -10,6 +10,11 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 const HomePage = () => {
+  let cellDimConstantShowMode = 0.5;
+  let cellDimConstantEducationMode = 1.2;
+  let weightSizeShowMode = 7;
+  let weightSizeEducationMode = 13;
+
   const [row, setRow] = useState(30);
   const [col, setCol] = useState(30);
   const [option, setOption] = useState('Wall');
@@ -21,8 +26,8 @@ const HomePage = () => {
   const logRef = useRef();
   const [key, setKey] = useState(0);
   const [mode, setMode] = useState(true);
-  const [cellDim,setCellDim] = useState(0.7);
-  const [weightSize,setWeightSize] = useState(20);
+  const [cellDim,setCellDim] = useState(cellDimConstantEducationMode);
+  const [weightSize,setWeightSize] = useState(15);
   const [maxRow,setMaxRow] = useState(100);
   const [maxCol ,setMaxCol] = useState(100)
 
@@ -55,14 +60,14 @@ const HomePage = () => {
     if(!mode){
     setRow(50);
     setCol(100);
-    setCellDim(0.7);
-    setWeightSize(10);
+    setCellDim(cellDimConstantShowMode);
+    setWeightSize(weightSizeShowMode);
     }else{
 
     setRow(30);
     setCol(30);
-    setCellDim(2);
-    setWeightSize(20);
+    setCellDim(cellDimConstantEducationMode);
+    setWeightSize(weightSizeEducationMode);
     }
   }, [mode]);
 

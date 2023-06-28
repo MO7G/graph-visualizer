@@ -16,7 +16,6 @@ const Grid = React.forwardRef((props, ref) => {
   const [gridNumbers, setGridNumbers] = useState([]);
   const [weightAllowed, setWeightAllowed] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
-  const [cellDim, setCellDim] = useState(2);
   const [okay, setOkay] = useState(13);
   useImperativeHandle(ref, () => ({
     handleOrder,
@@ -662,8 +661,8 @@ const Grid = React.forwardRef((props, ref) => {
           <div
             key={`${i}-${j}`}
             style={{
-              width: `${cellDim}em`,
-              height: `${cellDim}em`,
+              width: `${props.onCellDim}em`,
+              height: `${props.onCellDim}em`,
               backgroundColor: 'white',
               border: "0.1px solid black"
             }}
@@ -676,7 +675,7 @@ const Grid = React.forwardRef((props, ref) => {
           >
             <div key={`${i}-${j}`} data-row={i.toString()}
               data-col={j.toString()} className={`grid-number ${number !== null ? 'visible' : ''}`}>
-              <p>
+              <p style={{fontSize:`${props.onWeightedSize}px`}}>
                 {number !== null ? number : ''}
               </p>
             </div>

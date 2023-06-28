@@ -10,7 +10,26 @@
   align-items: center;
   margin-bottom: 10px; /* Add margin at the bottom */
 }
+label{
+  cursor: pointer;
+  user-select: none;
 
+}
+input[type="radio"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  outline: none;
+  background-color: red; /* Change background color to your desired color */
+  margin-right: 5px;
+}
+input[type="radio"]:checked {
+  background-color: white;
+  transition: all 0.3s;
+}
 .operation-container {
   display: flex;
   justify-content: space-between;

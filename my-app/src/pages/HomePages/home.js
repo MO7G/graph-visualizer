@@ -10,8 +10,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 const HomePage = () => {
-  const [row, setRow] = useState(10);
-  const [col, setCol] = useState(10);
+  const [row, setRow] = useState(30);
+  const [col, setCol] = useState(30);
   const [option, setOption] = useState('Wall');
   const [algorithm, setAlgorithm] = useState('dfs');
   const [multi, setMulti] = useState(false)
@@ -20,7 +20,16 @@ const HomePage = () => {
   const gridRef = useRef();
   const logRef = useRef();
   const [key, setKey] = useState(0);
+  const [mode, setMode] = useState(true);
+  const [cellDim,setCellDim] = useState(0.7);
+  const [weightSize,setWeightSize] = useState(20);
+  const [maxRow,setMaxRow] = useState(100);
+  const [maxCol ,setMaxCol] = useState(100)
 
+  const onHandleSetMode = () =>{
+    setMode(!mode);
+  }
+  
 
 
   const handleSizeSubmit = (newRow, newCol) => {
@@ -39,13 +48,41 @@ const HomePage = () => {
     logRef.current.handleNewLog(logMessage);
   }, [logMessage]);
 
-  const handleSetAlgorithm = (event) => {
-    setAlgorithm(event.target.value);
+
+
+  useEffect(() => {
+    // Chainging from educaton to show mode and vise versa !!!
+    if(!mode){
+    setRow(50);
+    setCol(100);
+    setCellDim(0.7);
+    setWeightSize(10);
+    }else{
+
+    setRow(30);
+    setCol(30);
+    setCellDim(2);
+    setWeightSize(20);
+    }
+  }, [mode]);
+
+  const handleSetAlgorithm = (algo,flag) => {
+        if(!flag){
+          setAlgorithm(algo);
+        }
+        if(flag == null){
+          setAlgorithm(algo.target.value)
+        }
   }
 
-  const handleSetOption = (event) => {
-    console.log(event.target.value);
-    setOption(event.target.value);
+  const handleSetOption = (value,flag) => {
+    if(!flag){
+      setOption(value);
+    }
+    if(flag == null){
+      setOption(value.target.value)
+    } 
+
   }
 
   const handleSetMulti = (event) => {
@@ -73,11 +110,10 @@ const HomePage = () => {
         <Col> <div className='home'>
           <div className='header'>
             <h1>Home Page</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptas corrupti ipsa accusantium qui totam, nihil sit officiis. Doloribus, quibusdam? Quae placeat tempore dolorem? Suscipit tenetur fugit enim ipsum! Optio, quidem?</p>
           </div>
           <ToastContainer />
-          <Dashboard onSliderValue={sliderValue} onSetSliderValue={hanldeSetSliderValue} onSetMulti={handleSetMulti} onHandleOrder={handleOrder} onRow={row} onCol={col} onSetRow={setRow} onSetCol={setCol} onOption={option} onHandleSetOption={handleSetOption} onSizeSubmit={handleSizeSubmit} handleSetAlgorithm={handleSetAlgorithm} algorithm={algorithm} />
-          <Grid handleSetLogMessage={setLogMessage} onSliderValue={sliderValue} ref={gridRef} onMulti={multi} row={row} col={col} onOption={option} onAlgorithm={algorithm} />
+          <Dashboard onHandleSetMode={onHandleSetMode} onMode={mode} onSliderValue={sliderValue} onSetSliderValue={hanldeSetSliderValue} onSetMulti={handleSetMulti} onHandleOrder={handleOrder} onRow={row} onCol={col} onSetRow={setRow} onSetCol={setCol} onOption={option} onHandleSetOption={handleSetOption} onSizeSubmit={handleSizeSubmit} handleSetAlgorithm={handleSetAlgorithm} algorithm={algorithm} />
+          <Grid onWeightedSize={weightSize} onCellDim={cellDim} handleSetLogMessage={setLogMessage} onSliderValue={sliderValue} ref={gridRef} onMulti={multi} row={row} col={col} onOption={option} onAlgorithm={algorithm} />
           <Log key={key} ref={logRef} onLogMessage={logMessage}></Log>
           <div className='size' style={{ height: '1000px ' }}></div>
         </div ></Col>

@@ -22,7 +22,7 @@
   border:   #222831   !important;
   width: 50px; /* Adjust the width as per your requirements */
   height: 50px; /* Adjust the height as per your requirements */
-  background-color: #222831 !important;
+  background-color: rgb(19, 18, 18) !important;
   
 }
 .cell:hover{
@@ -30,7 +30,7 @@
 }
 
 .cell.wall{
-    background-color: #913175 !important;
+    background-color: #EEE2DE !important;
     transition: all 0.3s;
 }
 .cell.source{
@@ -41,7 +41,7 @@
 }
 
 .cell.visiting {
- background-color: red !important;
+ background-color: rgb(255, 7, 7) !important;
  transition: 0.5s all
 
 }
@@ -65,7 +65,6 @@ background-color: #d8ab89 !important;
     opacity: 0;
     transition: opacity 0.5s;
     margin:  0;
-    font-size: 20px;
   }
   
   .grid-number.visible p {

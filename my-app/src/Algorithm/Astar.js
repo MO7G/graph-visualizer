@@ -97,7 +97,7 @@ function calculateDistance(nodeA, nodeB) {
     return Math.sqrt(dx * dx + dy * dy);
 }
 
-function aStarSearch(grid, startNode, goalNode) {
+function aStarSearch(grid, startNode, goalNode,backTrack) {
     const openList = new BinaryHeap();
     const closedList = new Map();
     const animation = [];
@@ -105,24 +105,24 @@ function aStarSearch(grid, startNode, goalNode) {
     startNode.g = 0;
     startNode.f = startNode.h = calculateDistance(startNode, goalNode);
     openList.push(startNode);
-
+   
     while (openList.size > 0) {
         const currentNode = openList.pop();
         closedList.set(`${currentNode.x},${currentNode.y}`, currentNode);
-
+        animation.push([currentNode.x,currentNode.y])
         if (currentNode === goalNode) {
             let current = currentNode;
             while (current !== null) {
-                animation.push([current.x, current.y]);
+               backTrack.push([current.x, current.y]);
                 current = current.parent;
             }
-            return animation.reverse();
+            return animation;
         }
 
         const neighbors = [];
         const { x, y } = currentNode;
 
-        if (x > 0) neighbors.push(grid[x - 1][y]);
+        if (x > 0) neighbors.push(grid[x - 1][y])
         if (x < grid.length - 1) neighbors.push(grid[x + 1][y]);
         if (y > 0) neighbors.push(grid[x][y - 1]);
         if (y < grid[0].length - 1) neighbors.push(grid[x][y + 1]);
@@ -184,12 +184,10 @@ const AStarHelper = (gridData) => {
     let yStart = gridData.source[0][1];
     let xEnd = gridData.target[0];
     let yEnd = gridData.target[1];
-    const path = aStarSearch(grid, grid[xStart][yStart], grid[xEnd][yEnd]);
-    let backTrack
+    let backtrack = []
+    const path = aStarSearch(grid, grid[xStart][yStart], grid[xEnd][yEnd],backtrack);
     if (path !== null) {
-        let backTrack = [...path];
-        backTrack.reverse();
-        return [path, backTrack];
+        return [path, backtrack];
     } else {
         return [null];
     }

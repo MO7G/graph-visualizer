@@ -9,7 +9,7 @@
 
 .scrollable-div {
   width: 100vw;
-  height: 200px;
+  height: 250px;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #888888 #f0f0f0;

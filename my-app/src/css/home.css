@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: center; /* Center vertically */
   align-items: center; /* Center horizontally */
-  color: white;
+  color: red;
   
 }
 .header p{

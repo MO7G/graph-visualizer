@@ -23,6 +23,8 @@
   width: 50px; /* Adjust the width as per your requirements */
   height: 50px; /* Adjust the height as per your requirements */
   background-color: rgb(19, 18, 18) !important;
+
+
   
 }
 .cell:hover{
@@ -32,6 +34,8 @@
 .cell.wall{
     background-color: #EEE2DE !important;
     transition: all 0.3s;
+    transform: translateY(-10%);
+    transition: transform 0.5s ease;
 }
 .cell.source{
     background-color: #9ac81e !important;

@@ -8,7 +8,7 @@ import greedyHelper from '../../Algorithm/greedy';
 import mazeGenerator from '../../Algorithm/Testing/mazeGenerator'
 import bellmanFordHelper from '../../Algorithm/bellmanFord';
 import AStarHelper from '../../Algorithm/Astar';
-
+import mazeBacktrackingHelper from '../../Algorithm/recursiveMazeGenerator';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -23,8 +23,79 @@ const Grid = React.forwardRef((props, ref) => {
     handleOrder,
     clearGrid
   }))
+ const drawMaze = (path) =>{
+
+  const cellElements = Array.from(document.getElementsByClassName('cell'));
+  const delay = props.onSliderValue;
+  const animateFirstLoop = () => {
+    return new Promise((resolve) => {
+      if (path[0].length === 0) {
+        resolve();
+      }
+
+      for (let i = 0; i < path[0].length; i++) {
+        const [row, col] = path[0][i];
+        const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+        setTimeout(() => {
+          cell.classList.add('wall');
+          if (i === path[0].length - 1) {
+            resolve(); // Resolve the promise when the first loop finishes
+          }
+
+        }, delay * i);
+      }
+    });
+  };
 
 
+
+  const animateSecondLoop = () => {
+    return new Promise((resolve) => {
+      if (path[0].length <= 1) {
+        resolve();
+      } else {
+        for (let i = 0; i < props.row; i++) {
+         for(let j = 0 ;j < props.col ;j++){
+          const cell = document.querySelector(`[data-row="${i}"][data-col="${j}"]`);
+          setTimeout(() => {
+           if(cell.classList.contains('wall')){
+            cell.classList.remove('wall');
+           }else{
+            cell.classList.add('wall')
+           }
+          }, delay * i);
+        }
+      }
+      }
+    });
+  };
+
+  animateFirstLoop()
+    .then(animateSecondLoop).then(() => {
+      handleToastProcessing("", "destroy");
+      if (path[1].length <= 1) {
+        handleToastProcessing(props.onAlgorithm, "no-path");
+      }
+      handleToastProcessing(props.onAlgorithm, "success");
+    })
+    .catch((error) => {
+      console.error('An error occurred:', error);
+    });
+
+ }
+ const backTrackingMaze = async () =>{
+          clearGrid();
+          let object = handleGridDTS(props.row, props.col);
+          handleToastProcessing("maze", "processing")
+          await delay(50);
+          let animation = await mazeBacktrackingHelper(object);
+          //props.handleSetLogMessage(animation[2]);
+          // console.log(animation[2])
+          handleToastProcessing("", "destroy");
+          handleToastProcessing("", "pathFinding")
+          drawMaze(animation);
+
+ }
   const handleOrder = (buttonId) => {
     if (buttonId === 'clearButton') {
       // Handle Clear button click
@@ -33,7 +104,7 @@ const Grid = React.forwardRef((props, ref) => {
       Animate();
       // Handle Animate button click
     } else if (buttonId === 'kurskalMazeButton') {
-      generateMaze()
+      backTrackingMaze()
       // Handle Kurskal Maze button click
     } else if (buttonId === 'randomMazeButton') {
       generateMaze();
@@ -505,6 +576,7 @@ const Grid = React.forwardRef((props, ref) => {
           handleToastProcessing("dij", "processing")
           await delay(50);
           let animation = await bellmanFordHelper(object, "njn");
+          console.log(animation);
          // props.handleSetLogMessage(animation[2]);
           handleToastProcessing("", "destroy");
           handleToastProcessing("", "pathFinding")
@@ -619,11 +691,8 @@ const Grid = React.forwardRef((props, ref) => {
       const rowNumbers = [];
       for (let j = 0; j < props.col; j++) {
 
-        const bigNumber = Math.floor(Math.random() * 10); // Random number between 50 and 149
+        const bigNumber = Math.floor(Math.random() * 140); // Random number between 50 and 149
         rowNumbers.push(bigNumber);
-
-
-
       }
       numbers.push(rowNumbers)
     }

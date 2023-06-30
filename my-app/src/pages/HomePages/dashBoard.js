@@ -2,6 +2,7 @@ import React, { useState , useRef } from 'react';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import '../../css/dashboard.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 const Dashboard = (props) => {
   const [xLimit, setXLimit] = useState(100);
   const [yLimit, setYLimit] = useState(100);
@@ -247,13 +248,13 @@ const Dashboard = (props) => {
       
         <div className='second-section-buttons'>
 
-          <button id="clearButton" onClick={props.onHandleOrder}>Clear</button>
-          <button id="animateButton" onClick={props.onHandleOrder}>Play</button>
-          <button id="kurskalMazeButton" onClick={props.onHandleOrder}>Kurskal Maze</button>
-          <button id="randomMazeButton" onClick={props.onHandleOrder}>Random Maze</button>
-          <button id="positiveNumbersButton" onClick={props.onHandleOrder}>Positive Numbers</button>
-          <button id="negativeNumbersButton" onClick={props.onHandleOrder}>Negative Numbers</button>
-          <button id='modeButton' onClick={props.onHandleSetMode}>{props.onMode ? 'Show Mode' : 'Educationl Mode'}</button>
+          <button id="clearButton" className={props.onIsProcessing ? 'disabled-button' : ''} disabled={props.onIsProcessing} onClick={props.onHandleOrder}>Clear</button>
+          <button id="animateButton" className={props.onIsProcessing ? 'disabled-button' : ''} disabled={props.onIsProcessing} onClick={props.onHandleOrder}>Play</button>
+          <button id="kurskalMazeButton" className={props.onIsProcessing ? 'disabled-button' : ''} disabled={props.onIsProcessing} onClick={props.onHandleOrder}>Kurskal Maze</button>
+          <button id="randomMazeButton" className={props.onIsProcessing ? 'disabled-button' : ''} disabled={props.onIsProcessing} onClick={props.onHandleOrder}>Random Maze</button>
+          <button id="positiveNumbersButton" className={props.onIsProcessing ? 'disabled-button' : ''} disabled={props.onIsProcessing} onClick={props.onHandleOrder}>Positive Numbers</button>
+          <button id="negativeNumbersButton" className={props.onIsProcessing ? 'disabled-button' : ''} disabled={props.onIsProcessing}onClick={props.onHandleOrder}>Negative Numbers</button>
+          <button id='modeButton' className={props.onIsProcessing ? 'disabled-button' : ''} disabled={props.onIsProcessing} onClick={props.onHandleSetMode}>{props.onMode ? 'Show Mode' : 'Educationl Mode'}</button>
         </div>
       </div>
 

@@ -8,7 +8,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-
 const HomePage = () => {
   let cellDimConstantShowMode = 0.5;
   let cellDimConstantEducationMode = 1.2;
@@ -30,6 +29,14 @@ const HomePage = () => {
   const [weightSize,setWeightSize] = useState(15);
   const [maxRow,setMaxRow] = useState(100);
   const [maxCol ,setMaxCol] = useState(100)
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const startProcess = () => {
+    setIsProcessing(true);
+  };
+
+
+
 
   const onHandleSetMode = () =>{
     setMode(!mode);
@@ -115,10 +122,13 @@ const HomePage = () => {
         <Col> <div className='home'>
           <div className='header'>
             <h1>Home Page</h1>
+            <div className="social-links">
+      
+            </div>
           </div>
           <ToastContainer />
-          <Dashboard onHandleSetMode={onHandleSetMode} onMode={mode} onSliderValue={sliderValue} onSetSliderValue={hanldeSetSliderValue} onSetMulti={handleSetMulti} onHandleOrder={handleOrder} onRow={row} onCol={col} onSetRow={setRow} onSetCol={setCol} onOption={option} onHandleSetOption={handleSetOption} onSizeSubmit={handleSizeSubmit} handleSetAlgorithm={handleSetAlgorithm} algorithm={algorithm} />
-          <Grid onWeightedSize={weightSize} onCellDim={cellDim} handleSetLogMessage={setLogMessage} onSliderValue={sliderValue} ref={gridRef} onMulti={multi} row={row} col={col} onOption={option} onAlgorithm={algorithm} />
+          <Dashboard onIsProcessing={isProcessing} onHandleSetMode={onHandleSetMode} onMode={mode} onSliderValue={sliderValue} onSetSliderValue={hanldeSetSliderValue} onSetMulti={handleSetMulti} onHandleOrder={handleOrder} onRow={row} onCol={col} onSetRow={setRow} onSetCol={setCol} onOption={option} onHandleSetOption={handleSetOption} onSizeSubmit={handleSizeSubmit} handleSetAlgorithm={handleSetAlgorithm} algorithm={algorithm} />
+          <Grid onSetIsProcessing={setIsProcessing} onWeightedSize={weightSize} onCellDim={cellDim} handleSetLogMessage={setLogMessage} onSliderValue={sliderValue} ref={gridRef} onMulti={multi} row={row} col={col} onOption={option} onAlgorithm={algorithm} />
           <Log key={key} ref={logRef} onLogMessage={logMessage}></Log>
           <div className='size' style={{ height: '1000px ' }}></div>
         </div ></Col>

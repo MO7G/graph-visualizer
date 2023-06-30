@@ -5,7 +5,6 @@ import DfsHelper from '../../Algorithm/DFS';
 import BfsHelper from '../../Algorithm/BFS'
 import DijHelper from '../../Algorithm/dijkstra';
 import greedyHelper from '../../Algorithm/greedy';
-import mazeGenerator from '../../Algorithm/Testing/mazeGenerator'
 import bellmanFordHelper from '../../Algorithm/bellmanFord';
 import AStarHelper from '../../Algorithm/Astar';
 import mazeBacktrackingHelper from '../../Algorithm/recursiveMazeGenerator';
@@ -421,6 +420,10 @@ const Grid = React.forwardRef((props, ref) => {
           handleToastProcessing(props.onAlgorithm, "no-path");
         }
         handleToastProcessing(props.onAlgorithm, "success");
+        setTimeout(() => {
+          props.onSetIsProcessing(false);
+        }, 800);
+   
       })
       .catch((error) => {
         console.error('An error occurred:', error);
@@ -523,6 +526,7 @@ const Grid = React.forwardRef((props, ref) => {
       if (algorithm === 'dfs') {
         let numberOfSources = checkNumberOfSource();
         if (numberOfSources) {
+          props.onSetIsProcessing(true);
           let object = handleGridDTS(props.row, props.col);
           handleToastProcessing("dij", "processing")
           await delay(50);
@@ -531,6 +535,7 @@ const Grid = React.forwardRef((props, ref) => {
           // console.log(animation[2])
           handleToastProcessing("", "destroy");
           handleToastProcessing("", "pathFinding")
+       
           draw(animation);
         } else {
           handleToastProcessing("", "many-sources")

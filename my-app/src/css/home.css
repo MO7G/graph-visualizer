@@ -12,3 +12,19 @@
   max-width: 100vh;
   margin: 0 auto; /* Center the container horizontally */
 }
+
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.social-links a {
+  margin: 0 10px; /* Adjust the spacing between the links */
+}
+
+.social-links img {
+  width: 30px; /* Adjust the icon size */
+  height: 30px;
+}

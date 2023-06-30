@@ -8,7 +8,7 @@ import greedyHelper from '../../Algorithm/greedy';
 import bellmanFordHelper from '../../Algorithm/bellmanFord';
 import AStarHelper from '../../Algorithm/Astar';
 import mazeBacktrackingHelper from '../../Algorithm/recursiveMazeGenerator';
-import { toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -22,10 +22,18 @@ const Grid = React.forwardRef((props, ref) => {
     handleOrder,
     clearGrid
   }))
+
+
  const drawMaze = (path) =>{
 
   const cellElements = Array.from(document.getElementsByClassName('cell'));
-  const delay = props.onSliderValue;
+  let delay = props.onSliderValue;
+  if(props.onMode == true){
+    delay = 8
+  }else{
+delay = 2
+  }
+  props.onSetIsProcessing(true);
   const animateFirstLoop = () => {
     return new Promise((resolve) => {
       if (path[0].length === 0) {
@@ -50,9 +58,6 @@ const Grid = React.forwardRef((props, ref) => {
 
   const animateSecondLoop = () => {
     return new Promise((resolve) => {
-      if (path[0].length <= 1) {
-        resolve();
-      } else {
         for (let i = 0; i < props.row; i++) {
          for(let j = 0 ;j < props.col ;j++){
           const cell = document.querySelector(`[data-row="${i}"][data-col="${j}"]`);
@@ -62,20 +67,20 @@ const Grid = React.forwardRef((props, ref) => {
            }else{
             cell.classList.add('wall')
            }
-          }, delay * i);
+           if(i == props.row-1 && j == props.col-1){
+            resolve();
+           }
+          }, 1 * i);
         }
-      }
       }
     });
   };
 
   animateFirstLoop()
     .then(animateSecondLoop).then(() => {
-      handleToastProcessing("", "destroy");
-      if (path[1].length <= 1) {
-        handleToastProcessing(props.onAlgorithm, "no-path");
-      }
-      handleToastProcessing(props.onAlgorithm, "success");
+      handleToastProcessing("","destroy")
+      handleToastProcessing("random", "success");
+      props.onSetIsProcessing(false);
     })
     .catch((error) => {
       console.error('An error occurred:', error);
@@ -84,14 +89,13 @@ const Grid = React.forwardRef((props, ref) => {
  }
  const backTrackingMaze = async () =>{
           clearGrid();
+          handleToastProcessing("maze", "processing")       
           let object = handleGridDTS(props.row, props.col);
-          handleToastProcessing("maze", "processing")
           await delay(50);
           let animation = await mazeBacktrackingHelper(object);
           //props.handleSetLogMessage(animation[2]);
           // console.log(animation[2])
-          handleToastProcessing("", "destroy");
-          handleToastProcessing("", "pathFinding")
+          
           drawMaze(animation);
 
  }
@@ -349,12 +353,43 @@ const Grid = React.forwardRef((props, ref) => {
     }
     return flag;
   }
-
+  
   const draw = (path) => {
     const cellElements = Array.from(document.getElementsByClassName('cell'));
     //  const duration = props.onSliderValue * path[0].length; // Total duration of the first loop
     // const delay = duration / path[0].length; // Delay between frames based on fps and path length
-    const delay = props.onSliderValue;
+    let totalCells = props.row * props.col;
+    let value = props.onSliderValue;
+    let delay
+    if(props.onMode == true){
+    if(value == 1){
+      delay = 300   
+      }else if(value == 21){
+        delay = 150
+      }else if(value == 41){
+         delay = 75
+      }else if(value == 61){
+   delay = 15
+      }else if(value  == 81){
+      delay = 8
+      }else if(value == 100){
+    delay = 2
+      }
+    }else{
+      if(value == 1){
+        delay = 30   
+        }else if(value == 21){
+          delay = 20
+        }else if(value == 41){
+           delay = 15
+        }else if(value == 61){
+     delay = 10
+        }else if(value  == 81){
+        delay = 6
+        }else if(value == 100){
+      delay = 1
+        }
+    }
     const animateFirstLoop = () => {
       return new Promise((resolve) => {
         if (path[0].length === 0) {
@@ -465,6 +500,12 @@ const Grid = React.forwardRef((props, ref) => {
       algorithm = "Multiple Breadth first Search"
     } else if (algorithm == 'multi-dij') {
       algorithm = "Multiple Dijkstra"
+    }else if (algorithm == 'bellman-ford'){
+      algorithm = "Bellman Ford Shortest Path"
+    }else if(algorithm == "greedy"){
+      algorithm = "Greedy Best First Search";
+    }else if(algorithm == "random"){
+      algorithm = "Random Recursive"
     }
 
     if (reason == "processing") {
@@ -527,8 +568,8 @@ const Grid = React.forwardRef((props, ref) => {
         let numberOfSources = checkNumberOfSource();
         if (numberOfSources) {
           props.onSetIsProcessing(true);
-          let object = handleGridDTS(props.row, props.col);
           handleToastProcessing("dij", "processing")
+          let object = handleGridDTS(props.row, props.col);
           await delay(50);
           let animation = await DfsHelper(object);
           props.handleSetLogMessage(animation[2]);
@@ -543,8 +584,9 @@ const Grid = React.forwardRef((props, ref) => {
       } else if (algorithm === 'bfs') {
         let numberOfSources = checkNumberOfSource();
         if (numberOfSources) {
-          let object = handleGridDTS(props.row, props.col);
+          props.onSetIsProcessing(true);
           handleToastProcessing("dij", "processing")
+          let object = handleGridDTS(props.row, props.col);
           
           await delay(50);
           let animation = await BfsHelper(object);
@@ -560,9 +602,9 @@ const Grid = React.forwardRef((props, ref) => {
       } else if (algorithm === 'dij') {
         let numberOfSources = checkNumberOfSource();
         if (numberOfSources) {
-          let object = handleGridDTS(props.row, props.col);
-
+          props.onSetIsProcessing(true);
           handleToastProcessing("dij", "processing")
+          let object = handleGridDTS(props.row, props.col);
           await delay(50);
           let animation = await DijHelper(object, "njn");
           props.handleSetLogMessage(animation[2]);
@@ -576,9 +618,9 @@ const Grid = React.forwardRef((props, ref) => {
       } else if (algorithm === 'bellman-ford') {
         let numberOfSources = checkNumberOfSource();
         if (numberOfSources) {
+          props.onSetIsProcessing(true);
+          handleToastProcessing("bellman-ford", "processing")
           let object = handleGridDTS(props.row, props.col);
-
-          handleToastProcessing("dij", "processing")
           await delay(50);
           let animation = await bellmanFordHelper(object, "njn");
           console.log(animation);
@@ -593,8 +635,9 @@ const Grid = React.forwardRef((props, ref) => {
       } else if (algorithm === 'Astar') {
         let numberOfSources = checkNumberOfSource();
         if (numberOfSources) {
-          let object = handleGridDTS(props.row, props.col);
+          props.onSetIsProcessing(true);
           handleToastProcessing("Astar", "processing")
+          let object = handleGridDTS(props.row, props.col);
           await delay(50);
           let animation = await AStarHelper(object);
           toast.dismiss()
@@ -612,8 +655,9 @@ const Grid = React.forwardRef((props, ref) => {
       } else if (algorithm === 'greedy') {
         let numberOfSources = checkNumberOfSource();
         if (numberOfSources) {
+          props.onSetIsProcessing(true);
+          handleToastProcessing("greedy", "processing")
           let object = handleGridDTS(props.row, props.col);
-          handleToastProcessing("Astar", "processing")
           await delay(50);
           let animation = await greedyHelper(object);
           toast.dismiss()
@@ -629,8 +673,9 @@ const Grid = React.forwardRef((props, ref) => {
           handleToastProcessing("", "many-sources")
         }
        } else if (algorithm === 'multi-bfs') {
-        let object = handleGridDTS(props.row, props.col);
+        props.onSetIsProcessing(true);
         handleToastProcessing("mutli-bfs", "processing")
+        let object = handleGridDTS(props.row, props.col);
         await delay(50);
         let animation = await BfsHelper(object, "multi-bfs");
         props.handleSetLogMessage(animation[2]);
@@ -638,14 +683,13 @@ const Grid = React.forwardRef((props, ref) => {
         handleToastProcessing("", "pathFinding")
         draw(animation);
       } else if (algorithm === 'multi-dij') {
-        let object = handleGridDTS(props.row, props.col);
+        props.onSetIsProcessing(true);
         handleToastProcessing("mutli-bfs", "processing")
+        let object = handleGridDTS(props.row, props.col);
         await delay(50);
         let animation = await DijHelper(object, "multi-dij");
         console.log(animation[2])
         props.handleSetLogMessage(animation[2]);
-        
-
         handleToastProcessing("", "destroy");
         handleToastProcessing("", "pathFinding")
         draw(animation);

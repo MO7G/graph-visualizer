@@ -237,7 +237,7 @@ const Dashboard = (props) => {
             <Slider
               min={1} // Minimum value of the slider
               max={100} // Maximum value of the slider
-              step={1} // Step value for each increment/decrement
+              step={20} // Step value for each increment/decrement
               value={props.onSliderValue} // Current value of the slider
               onChange={props.onSetSliderValue} // Event handler for slider value change
             />

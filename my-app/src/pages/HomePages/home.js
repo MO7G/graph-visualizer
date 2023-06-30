@@ -19,7 +19,7 @@ const HomePage = () => {
   const [option, setOption] = useState('Wall');
   const [algorithm, setAlgorithm] = useState('dfs');
   const [multi, setMulti] = useState(false)
-  const [sliderValue, setSliderValue] = useState(0.5); // Default value of 60
+  const [sliderValue, setSliderValue] = useState(200); // Default value of 60
   const [logMessage, setLogMessage] = useState('');
   const gridRef = useRef();
   const logRef = useRef();
@@ -109,6 +109,7 @@ const HomePage = () => {
   };
 
   const hanldeSetSliderValue = (value) => {
+    console.log(value)
     setSliderValue(value);
   };
 
@@ -128,7 +129,7 @@ const HomePage = () => {
           </div>
           <ToastContainer />
           <Dashboard onIsProcessing={isProcessing} onHandleSetMode={onHandleSetMode} onMode={mode} onSliderValue={sliderValue} onSetSliderValue={hanldeSetSliderValue} onSetMulti={handleSetMulti} onHandleOrder={handleOrder} onRow={row} onCol={col} onSetRow={setRow} onSetCol={setCol} onOption={option} onHandleSetOption={handleSetOption} onSizeSubmit={handleSizeSubmit} handleSetAlgorithm={handleSetAlgorithm} algorithm={algorithm} />
-          <Grid onSetIsProcessing={setIsProcessing} onWeightedSize={weightSize} onCellDim={cellDim} handleSetLogMessage={setLogMessage} onSliderValue={sliderValue} ref={gridRef} onMulti={multi} row={row} col={col} onOption={option} onAlgorithm={algorithm} />
+          <Grid onMode={mode} onSetIsProcessing={setIsProcessing} onWeightedSize={weightSize} onCellDim={cellDim} handleSetLogMessage={setLogMessage} onSliderValue={sliderValue} ref={gridRef} onMulti={multi} row={row} col={col} onOption={option} onAlgorithm={algorithm} />
           <Log key={key} ref={logRef} onLogMessage={logMessage}></Log>
           <div className='size' style={{ height: '1000px ' }}></div>
         </div ></Col>

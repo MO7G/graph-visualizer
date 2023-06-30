@@ -1,7 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
 .dashboard-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-family: 'Open Sans', Arial, sans-serif;
+
+  
   
 }
 
@@ -14,6 +19,8 @@
 label{
   cursor: pointer;
   user-select: none;
+  color: #44318d;
+font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 
 }
 input[type="radio"] {
@@ -24,7 +31,8 @@ input[type="radio"] {
   height: 20px;
   border-radius: 50%;
   outline: none;
-  background-color: red; /* Change background color to your desired color */
+  background-color: #44318d; /* Change background color to your desired color */
+  
   margin-right: 5px;
 }
 input[type="radio"]:checked {
@@ -34,8 +42,7 @@ input[type="radio"]:checked {
 .operation-container {
   display: flex;
   justify-content: space-between;
-  background-color: black;
-  color: red;
+  color: whitesmoke;
   margin-bottom: 10px; /* Add margin at the bottom */
   width: 60vh;
   font-size: 25px;
@@ -47,8 +54,7 @@ input[type="radio"]:checked {
   flex-wrap: wrap;
   justify-content: space-evenly;
   align-items: center;
-  color: red;
-  background-color: black;
+  color: whitesmoke;
   width: 90vmax;
   font-size: 25px;
   margin: 20px ;    
@@ -60,6 +66,7 @@ input[type="radio"]:checked {
   flex-direction: column;
   align-items: center;
   margin-top: 20px;
+  
 }
 
 
@@ -87,6 +94,7 @@ form {
   justify-content: space-evenly;
   align-items: center;
   width: 50vh;
+
 }
 
 
@@ -96,6 +104,7 @@ form {
   margin-right: 10px;
   height: 62px;
   width: 203px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 
 }
 
@@ -107,32 +116,32 @@ form {
   width: 203px;
   border: none;
   cursor: pointer;
-  background-color: red;
+  border: 1px solid #44318d;
+  background-color: #1a1a1d;
   margin-left: 10px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   color: white;
 }
 .row-col-form button[type="submit"]:hover{
-  background-color: white;;
-  transition: 0.5s all;
-  color: black;
+  transition: 0.5s all; color: white;
+  background-color: #b62385;
+  color: white;
+  background-color: #b62385;
 }
 
 .slider span {
   margin-left: 10px;
-  background-color: red;
-}
+  background-color: #44318d !important;}
 .rc-slider-track{
-background-color: red;
-}
+  background-color: #44318d !important;}
 .rc-slider-track{
-    background-color: red   ;
-}
+  background-color: #44318d !important;}
 .rc-slider-handle{
-    background-color: red;
+  border: solid 2px #44318d;
 }
 .rc-slider-handle-dragging.rc-slider-handle-dragging.rc-slider-handle-dragging {
-  border-color: red;
-  box-shadow: 0 0 0 5px red;
+  background-color: #44318d !important;  
+  box-shadow: 0 0 0 5px #44318d;
 }
 .second-section-buttons {
   display: flex;
@@ -147,17 +156,19 @@ background-color: red;
   background-color: #f0f0f0;
   border: none;
   cursor: pointer;
-  background-color: red;
+  background-color: #1a1a1d;
+  border: 1px solid #44318d;
   margin-left: 10px;
   user-select: none;
   color: white;
   transition: 0.5s all;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 
 .second-section-buttons button:hover{
-  background-color: white;
   transition: 0.5s all;
-  color: black;
+  color: white;
+  background-color: #b62385;
 
 
 }
@@ -167,6 +178,6 @@ background-color: red;
   opacity: 0.5; /* Reduce the opacity to visually indicate disabled state */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Add a shadow effect */
   /* Add any other desired styles for the disabled state */
-  background-color: rgb(43, 22, 22)!important;
+  background-color: #b62385 !important;
   transition: 0.4s all;
 }

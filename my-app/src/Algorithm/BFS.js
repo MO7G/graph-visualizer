@@ -24,6 +24,8 @@ const BfsHelper = (gridData, type) => {
     let parent = create2DArray(gridData.row, gridData.col);
     let grid = gridData.realGrid;
     let multiSource = gridData.source
+    let xStart = gridData.source[0][0];
+    let yStart = gridData.source[0][1];
     let xEnd = gridData.target[0];
     let yEnd = gridData.target[1];
     let row = gridData.row;
@@ -36,7 +38,7 @@ const BfsHelper = (gridData, type) => {
     }
     Bfs(multiSource, xEnd, yEnd, row, col, vis, grid, path, parent, type, discoveries);
     console.log(discoveries.counter)
-    constructShortestPath(xEnd, yEnd, parent, shortestPath, discoveries)
+    constructShortestPath(xStart ,yStart ,xEnd, yEnd, parent, shortestPath, discoveries)
     let message = setMessage(discoveries, row, col, walls);
 
     return [path, shortestPath, message];
@@ -93,11 +95,11 @@ const Bfs = (multiSource, xEnd, yEnd, row, col, vis, grid, path, parent, type, d
     discoveries.counter--;
 }
 
-const constructShortestPath = (xEnd, yEnd, parent, shortestPath, discoveries) => {
+const constructShortestPath = (xStart , yStart ,xEnd, yEnd, parent, shortestPath, discoveries) => {
     console.log(shortestPath)
     let currentX = xEnd;
     let currentY = yEnd;
-    while (currentX !== 0 || currentY !== 0) {
+    while (currentX !== xStart || currentY !== yStart) {
         shortestPath.push([currentX, currentY]);
         let parents = parent[currentX][currentY];
         if (parents) {

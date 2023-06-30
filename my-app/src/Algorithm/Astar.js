@@ -97,63 +97,81 @@ function calculateDistance(nodeA, nodeB) {
     return Math.sqrt(dx * dx + dy * dy);
 }
 
-function aStarSearch(grid, startNode, goalNode,backTrack) {
+function aStarSearch(grid, startNode, goalNode, backTrack) {
     const openList = new BinaryHeap();
     const closedList = new Map();
     const animation = [];
-
+  
     startNode.g = 0;
     startNode.f = startNode.h = calculateDistance(startNode, goalNode);
     openList.push(startNode);
-   
+  
     while (openList.size > 0) {
-        const currentNode = openList.pop();
-        closedList.set(`${currentNode.x},${currentNode.y}`, currentNode);
-        animation.push([currentNode.x,currentNode.y])
-        if (currentNode === goalNode) {
-            let current = currentNode;
-            while (current !== null) {
-               backTrack.push([current.x, current.y]);
-                current = current.parent;
-            }
-            return animation;
+      const currentNode = openList.pop();
+      closedList.set(`${currentNode.x},${currentNode.y}`, currentNode);
+      animation.push([currentNode.x, currentNode.y]);
+  
+      if (currentNode === goalNode) {
+        let current = currentNode;
+        while (current !== null) {
+          backTrack.push([current.x, current.y]);
+          current = current.parent;
         }
-
-        const neighbors = [];
-        const { x, y } = currentNode;
-
-        if (x > 0) neighbors.push(grid[x - 1][y])
-        if (x < grid.length - 1) neighbors.push(grid[x + 1][y]);
-        if (y > 0) neighbors.push(grid[x][y - 1]);
-        if (y < grid[0].length - 1) neighbors.push(grid[x][y + 1]);
-
-        for (let neighbor of neighbors) {
-            if (closedList.has(`${neighbor.x},${neighbor.y}`) || neighbor.obstacle) {
-                continue;
-            }
-
-            const tentativeG = currentNode.g + 1;
-            const h = calculateDistance(neighbor, goalNode);
-            const f = tentativeG + h;
-
-            if (!openList.heap.includes(neighbor)) {
-                neighbor.g = tentativeG;
-                neighbor.h = h;
-                neighbor.f = f;
-                neighbor.parent = currentNode;
-                openList.push(neighbor);
-            } else if (tentativeG < neighbor.g) {
-                neighbor.g = tentativeG;
-                neighbor.h = h;
-                neighbor.f = f;
-                neighbor.parent = currentNode;
-            }
+        return animation;
+      }
+  
+      const neighbors = [];
+      const { x, y } = currentNode;
+  
+      if (x > 0) neighbors.push(grid[x - 1][y]);
+      if (x < grid.length - 1) neighbors.push(grid[x + 1][y]);
+      if (y > 0) neighbors.push(grid[x][y - 1]);
+      if (y < grid[0].length - 1) neighbors.push(grid[x][y + 1]);
+  
+      let hasValidNeighbor = false;
+  
+      for (let neighbor of neighbors) {
+        if (closedList.has(`${neighbor.x},${neighbor.y}`) || neighbor.obstacle) {
+          continue;
         }
+  
+        const tentativeG = currentNode.g + 1;
+        const h = calculateDistance(neighbor, goalNode);
+        const f = tentativeG + h;
+  
+        if (!openList.heap.includes(neighbor)) {
+          neighbor.g = tentativeG;
+          neighbor.h = h;
+          neighbor.f = f;
+          neighbor.parent = currentNode;
+          openList.push(neighbor);
+          hasValidNeighbor = true;
+        } else if (tentativeG < neighbor.g) {
+          neighbor.g = tentativeG;
+          neighbor.h = h;
+          neighbor.f = f;
+          neighbor.parent = currentNode;
+          hasValidNeighbor = true;
+        }
+      }
+  
+      if (!hasValidNeighbor) {
+        // Mark the current node as a dead end in the animation
+        animation.push([currentNode.x, currentNode.y, true]);
+      }
     }
-
-    return null;
-}
-
+  
+    // If no solution found, push the visited positions to animation
+    for (let [key, node] of closedList.entries()) {
+      if (!node.obstacle) {
+        animation.push([node.x, node.y]);
+      }
+    }
+  
+    return animation;
+  }
+  
+  
 
 function create2DArray(rows, cols, realGrid) {
     const grid = [];
@@ -189,7 +207,7 @@ const AStarHelper = (gridData) => {
     if (path !== null) {
         return [path, backtrack];
     } else {
-        return [null];
+        return [path,backtrack];
     }
 
 };

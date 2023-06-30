@@ -8,6 +8,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { FaGithub, FaLinkedin } from 'react-icons/fa';
+import { GoMail } from 'react-icons/go';
+
 const HomePage = () => {
   let cellDimConstantShowMode = 0.5;
   let cellDimConstantEducationMode = 1.2;
@@ -30,6 +33,7 @@ const HomePage = () => {
   const [maxRow,setMaxRow] = useState(100);
   const [maxCol ,setMaxCol] = useState(100)
   const [isProcessing, setIsProcessing] = useState(false);
+
 
   const startProcess = () => {
     setIsProcessing(true);
@@ -122,9 +126,17 @@ const HomePage = () => {
       <Row>
         <Col> <div className='home'>
           <div className='header'>
-            <h1>Home Page</h1>
+            <h1>Maze Solver </h1>
             <div className="social-links">
-      
+            <a href="https://github.com/MO7G" target="_blank" rel="noopener noreferrer">
+        <FaGithub size={42} className='github'/>
+      </a>
+      <a href="https://www.linkedin.com/in/muhamed-elhag/" target="_blank" rel="noopener noreferrer">
+        <FaLinkedin size={42} className='linkedin' />
+      </a>
+      <a href="mailto:muhamedelhagg@gmail.com" target="_blank" rel="noopener noreferrer">
+        <GoMail size={42} className='email' />
+      </a>
             </div>
           </div>
           <ToastContainer />

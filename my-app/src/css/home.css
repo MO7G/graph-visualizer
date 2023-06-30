@@ -3,8 +3,11 @@
   flex-direction: column;
   justify-content: center; /* Center vertically */
   align-items: center; /* Center horizontally */
-  color: red;
+  color: #44318d;
   
+}
+.header h1{
+  margin-top: 15px;
 }
 .header p{
   display: block;
@@ -18,13 +21,30 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 40px;
 }
 
 .social-links a {
-  margin: 0 10px; /* Adjust the spacing between the links */
+  margin: 0 40px; /* Adjust the spacing between the links */
 }
 
-.social-links img {
-  width: 30px; /* Adjust the icon size */
-  height: 30px;
+
+.linkedin{
+ color: #44318d;
 }
+.email{
+  color: #44318d;
+}
+.github{
+  color: #44318d;
+}
+
+.linkedin:hover{
+  color: white;
+ }
+ .email:hover{
+   color: white;
+ }
+ .github:hover{
+   color: white;
+ }

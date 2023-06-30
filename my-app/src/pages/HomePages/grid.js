@@ -115,10 +115,9 @@ delay = 2
     } else if (buttonId === 'positiveNumbersButton') {
       fillGridWithNumbers();
       // Handle Positive Numbers button click
-    } else if (buttonId === 'negativeNumbersButton') {
+    } else if (buttonId === 'clearNumbers') {
       // Handle Negative Numbers button click
-      fillGridWithNegativeNumbers();
-    }
+      console.log("from line 116");    }
   };
 
   const doWork = () => {
@@ -387,7 +386,7 @@ delay = 2
         }else if(value  == 81){
         delay = 6
         }else if(value == 100){
-      delay = 1
+      delay = 1.5
         }
     }
     const animateFirstLoop = () => {
@@ -437,6 +436,7 @@ delay = 2
               if (cell.classList.contains('target') || cell.classList.contains('source')) {
 
               } else {
+                cell.classList.remove('visiting')
                 cell.classList.add('done');
               }
               if (index === path[1].length - 1) {
@@ -640,8 +640,10 @@ delay = 2
           let object = handleGridDTS(props.row, props.col);
           await delay(50);
           let animation = await AStarHelper(object);
+          
           toast.dismiss()
           if (animation[0] === null) {
+         
             handleToastProcessing("Astar", "error");
           } else {
             handleToastProcessing("", "destroy");
@@ -740,7 +742,7 @@ delay = 2
       const rowNumbers = [];
       for (let j = 0; j < props.col; j++) {
 
-        const bigNumber = Math.floor(Math.random() * 140); // Random number between 50 and 149
+        const bigNumber = Math.floor(Math.random() * 99); // Random number between 50 and 149
         rowNumbers.push(bigNumber);
       }
       numbers.push(rowNumbers)

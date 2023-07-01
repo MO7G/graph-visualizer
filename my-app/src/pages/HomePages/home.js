@@ -144,6 +144,7 @@ const HomePage = () => {
           <Grid onMode={mode} onSetIsProcessing={setIsProcessing} onWeightedSize={weightSize} onCellDim={cellDim} handleSetLogMessage={setLogMessage} onSliderValue={sliderValue} ref={gridRef} onMulti={multi} row={row} col={col} onOption={option} onAlgorithm={algorithm} />
           <Log key={key} ref={logRef} onLogMessage={logMessage}></Log>
           <div className='size' style={{ height: '1000px ' }}></div>
+
         </div ></Col>
       </Row>
     </Container>

@@ -1,3 +1,30 @@
+const setMessage = (discoveries, row, col, walls) => {
+  let Name = "Bellman-Ford Single-Source Shortest Path";
+  let complexity = "O(n^2) * O(V) = O(n^2 * n) = O(n^3)"
+  let TotalRelxation ="4n^3 - 4n^2"
+  let discovered = discoveries.counter;
+  let TotalSize = row * col;
+  let PathLength = discoveries.path;
+  let percentage = (discovered / TotalSize) * 100;
+  let relaxation = discoveries.relaxation
+  let ValidWalls = TotalSize - walls;
+  let Classification;
+  Classification = "Worst-case"
+  const Message = `
+Name: ${Name}
+Time Complexity: ${complexity}
+TotalRelaxation: ${TotalRelxation}
+TotalSize: ${TotalSize}
+walls:${walls}
+Discovered: ${discovered}
+PathLength: ${PathLength}
+relaxations: ${relaxation}
+Work done : ${percentage}%
+Classification:${Classification}  
+`;
+  return Message
+}
+
 const bellmanFordHelper = (gridData) => {
     let path = [];
     let grid = gridData.realGrid;
@@ -9,18 +36,20 @@ const bellmanFordHelper = (gridData) => {
     let col = gridData.col;
     let walls = gridData.walls
     let discoveries = {
+      relaxation:0,
       counter: 0,
       path: 0
     }
-    let shortestPath =  bellmanFord(grid,xStart,yStart,xEnd,yEnd,row,col,path);
+    let shortestPath =  bellmanFord(grid,xStart,yStart,xEnd,yEnd,row,col,path,discoveries);
+    let message = setMessage(discoveries,row,col,walls);
     if(shortestPath == [] ){
         return [path,[]]
     }else{
-        return [path,shortestPath];
+        return [path,shortestPath,message];
     }
       };
 
-      function bellmanFord(grid, startX, startY, targetX, targetY, row, col, path) {
+      function bellmanFord(grid, startX, startY, targetX, targetY, row, col, path,discoveries) {
         const dx = [-1, 1, 0, 0]; // Directional movements in the x-axis (up, down, left, right)
         const dy = [0, 0, -1, 1]; // Directional movements in the y-axis (up, down, left, right)
       
@@ -42,10 +71,12 @@ const bellmanFordHelper = (gridData) => {
                 if (nx >= 0 && nx < row && ny >= 0 && ny < col && grid[nx][ny] !== -1) {
                   const weight = grid[nx][ny];
                   if (distance[x][y] + weight < distance[nx][ny]) {
+                    discoveries.relaxation++;
                     distance[nx][ny] = distance[x][y] + weight;
                     parent[nx][ny] = [x, y];
                     if(!vis[nx][ny]){
                     path.push([nx,ny])
+                    discoveries.counter++;
                     vis[nx][ny] = 1;
                     }
                   }
@@ -80,6 +111,7 @@ const bellmanFordHelper = (gridData) => {
 
   while (currentX !== startX || currentY !== startY) {
     shortestPath.push([currentX, currentY]);
+    discoveries.path++;
     const parentPos = parent[currentX][currentY];
     if (parentPos === null) {
       // No path exists, return an empty path
@@ -94,5 +126,6 @@ const bellmanFordHelper = (gridData) => {
 
   return shortestPath;
       }
+
       
 export default bellmanFordHelper

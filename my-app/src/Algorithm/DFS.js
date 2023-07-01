@@ -39,7 +39,7 @@ const DfsHelper = (gridData) => {
   path.pop();
   let message = setMessage(discoveries, row, col, walls);
 
-  return [path, shortestPath, message];
+  return [path, shortestPath.reverse(), message];
 };
 
 
@@ -119,7 +119,6 @@ const constructShortestPath = (parent, xStart, yStart, xEnd, yEnd, discoveries) 
   }
 
   shortestPath.push([xStart, yStart]);
-  discoveries.path++;
   shortestPath.reverse(); // Reverse the path to get the correct order
 
   return shortestPath;

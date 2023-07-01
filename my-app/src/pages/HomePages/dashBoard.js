@@ -250,7 +250,7 @@ const Dashboard = (props) => {
 
           <button id="clearButton" className={props.onIsProcessing ? 'disabled-button' : ''} disabled={props.onIsProcessing} onClick={props.onHandleOrder}>Clear</button>
           <button id="animateButton" className={props.onIsProcessing ? 'disabled-button' : ''} disabled={props.onIsProcessing} onClick={props.onHandleOrder}>Play</button>
-          <button id="kurskalMazeButton" className={props.onIsProcessing ? 'disabled-button' : ''} disabled={props.onIsProcessing} onClick={props.onHandleOrder}>Kurskal Maze</button>
+          <button id="kurskalMazeButton" className={props.onIsProcessing ? 'disabled-button' : ''} disabled={props.onIsProcessing} onClick={props.onHandleOrder}>Recursive Maze</button>
           <button id="randomMazeButton" className={props.onIsProcessing ? 'disabled-button' : ''} disabled={props.onIsProcessing} onClick={props.onHandleOrder}>Random Maze</button>
           <button id="positiveNumbersButton" className={props.onIsProcessing ? 'disabled-button' : ''} disabled={props.onIsProcessing} onClick={props.onHandleOrder}>Generate Numbers</button>
           <button id="clearNumbers" className={props.onIsProcessing ? 'disabled-button' : ''} disabled={props.onIsProcessing}onClick={props.onHandleOrder}>Clear Numbers</button>

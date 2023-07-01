@@ -36,7 +36,7 @@
     animation: beat 0.3s  ;
 }
 .cell.source{
-    background-color: #ff0000 !important;
+    background-color: rgb(0, 0, 0) !important;
 }
 .cell.target{
     background-color: #7bff00  !important;

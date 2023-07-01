@@ -110,13 +110,14 @@ delay = 2
       backTrackingMaze()
       // Handle Kurskal Maze button click
     } else if (buttonId === 'randomMazeButton') {
-      generateMaze();
+      randomMaze();
       // Handle Random Maze button click
     } else if (buttonId === 'positiveNumbersButton') {
       fillGridWithNumbers();
       // Handle Positive Numbers button click
     } else if (buttonId === 'clearNumbers') {
       // Handle Negative Numbers button click
+      clearNumbers();
       console.log("from line 116");    }
   };
 
@@ -161,6 +162,8 @@ delay = 2
     const operation = props.onOption.toLowerCase();
     if (operation === 'wall') {
       cell.classList.add('wall');
+      cell.classList.remove('source')
+      cell.classList.remove('target');
       //   cellWeight[x*props.col + y].classList.remove('visible');
       //event.target.style.backgroundColor = 'black';
     } else if (operation === 'source') {
@@ -171,6 +174,7 @@ delay = 2
       cell.classList.remove('wall');
       cell.classList.remove('done');
       cell.classList.remove('visiting');
+      cell.classList.remove('target');
       cell.classList.add('source');
       // cellWeight[x*props.col + y].classList.remove('visible');
     } else if (operation === 'target') {
@@ -179,6 +183,7 @@ delay = 2
         existingSource.classList.remove('target');
       }
       cell.classList.add('target');
+      cell.classList.remove('source');
       cell.classList.remove('wall');
       cell.classList.remove('done');
       cell.classList.remove('visiting');
@@ -384,9 +389,9 @@ delay = 2
         }else if(value == 61){
      delay = 10
         }else if(value  == 81){
-        delay = 6
+        delay = 4
         }else if(value == 100){
-      delay = 1.5
+      delay = 2
         }
     }
     const animateFirstLoop = () => {
@@ -568,7 +573,7 @@ delay = 2
         let numberOfSources = checkNumberOfSource();
         if (numberOfSources) {
           props.onSetIsProcessing(true);
-          handleToastProcessing("dij", "processing")
+          handleToastProcessing("dfs", "processing")
           let object = handleGridDTS(props.row, props.col);
           await delay(50);
           let animation = await DfsHelper(object);
@@ -585,7 +590,7 @@ delay = 2
         let numberOfSources = checkNumberOfSource();
         if (numberOfSources) {
           props.onSetIsProcessing(true);
-          handleToastProcessing("dij", "processing")
+          handleToastProcessing("bfs", "processing")
           let object = handleGridDTS(props.row, props.col);
           
           await delay(50);
@@ -606,7 +611,7 @@ delay = 2
           handleToastProcessing("dij", "processing")
           let object = handleGridDTS(props.row, props.col);
           await delay(50);
-          let animation = await DijHelper(object, "njn");
+          let animation = await DijHelper(object, "not-multiple-source");
           props.handleSetLogMessage(animation[2]);
           handleToastProcessing("", "destroy");
           handleToastProcessing("", "pathFinding")
@@ -622,9 +627,9 @@ delay = 2
           handleToastProcessing("bellman-ford", "processing")
           let object = handleGridDTS(props.row, props.col);
           await delay(50);
-          let animation = await bellmanFordHelper(object, "njn");
+          let animation = await bellmanFordHelper(object);
+          props.handleSetLogMessage(animation[2]);
           console.log(animation);
-         // props.handleSetLogMessage(animation[2]);
           handleToastProcessing("", "destroy");
           handleToastProcessing("", "pathFinding")
           draw(animation);
@@ -751,23 +756,9 @@ delay = 2
     setWeightAllowed(true);
   };
 
-  const fillGridWithNegativeNumbers = () => {
-    const numbers = [];
-    for (let i = 0; i < props.row; i++) {
-      const rowNumbers = [];
-      for (let j = 0; j < props.col; j++) {
-        if(j ===  props.col-1){
-        const randomNumber = Math.floor(Math.random() * 1999) - 999; // Generate random number between -999 and 999
-        rowNumbers.push(randomNumber);
-        }else{
-          const randomNumber = Math.floor(Math.random() * 1999) - 999; // Generate random number between -999 and 999
-          rowNumbers.push(randomNumber);
-        }
-      }
-      numbers.push(rowNumbers);
-    }
-    setGridNumbers(numbers);
-    setWeightAllowed(true)
+  const clearNumbers = () => {
+    setWeightAllowed(false);
+    setGridNumbers([]);
   };
 
   const clearGrid = () => {
@@ -790,7 +781,8 @@ delay = 2
     setGridNumbers([]);
   };
 
-  const generateMaze = () => {
+  const randomMaze = () => {
+    clearGrid();
     let row = props.row;
     let col = props.col;
     for (let i = 0; i < row / 2; i++) {

@@ -645,10 +645,10 @@ delay = 2
           let object = handleGridDTS(props.row, props.col);
           await delay(50);
           let animation = await AStarHelper(object);
-          
-          toast.dismiss()
+          console.log(animation)
+          props.handleSetLogMessage(animation[2]);
+          toast.dismiss();
           if (animation[0] === null) {
-         
             handleToastProcessing("Astar", "error");
           } else {
             handleToastProcessing("", "destroy");
@@ -667,6 +667,7 @@ delay = 2
           let object = handleGridDTS(props.row, props.col);
           await delay(50);
           let animation = await greedyHelper(object);
+          props.handleSetLogMessage(animation[2]);
           toast.dismiss()
           if (animation[0] === null) {
             handleToastProcessing("Astar", "error");

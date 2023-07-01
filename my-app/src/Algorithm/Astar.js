@@ -97,11 +97,44 @@ function calculateDistance(nodeA, nodeB) {
     return Math.sqrt(dx * dx + dy * dy);
 }
 
-function aStarSearch(grid, startNode, goalNode, backTrack) {
+
+const setMessage = (discoveries, row, col, walls) => {
+    let Name = "A* search algorithm";
+    let complexity = "O(b^d)";
+    let discovered = discoveries.counter;
+    let TotalSize = row * col;
+    let PathLength = discoveries.path;
+    let percentage = (discovered / TotalSize) * 100;
+    let heuristic = "Manhattan distance heuristic"
+    let ValidWalls = TotalSize - walls;
+    let Classification;
+    if (discovered == 2) {
+      Classification = "Best case";
+    } else if (discovered - ValidWalls == 0) {
+      Classification = "Worst case";
+    } else {
+      Classification = "Average case";
+    }
+    const Message = `
+    Name: ${Name}
+    Time Complexity: ${complexity}
+    TotalSize: ${TotalSize}
+    walls:${walls}
+    Discovered: ${discovered}
+    PathLength: ${PathLength}
+    Heuristic: ${heuristic}
+    Work done : ${percentage}%
+    Classification:${Classification}  
+    `;
+    return Message;
+  };
+function aStarSearch(grid, startNode, goalNode, backTrack,row,col,discoveries) {
     const openList = new BinaryHeap();
     const closedList = new Map();
     const animation = [];
-  
+    let dx = [-1, 0, 1, 0]; // Up, Right, Down, Left
+    let dy = [0, 1, 0, -1];
+    
     startNode.g = 0;
     startNode.f = startNode.h = calculateDistance(startNode, goalNode);
     openList.push(startNode);
@@ -110,11 +143,12 @@ function aStarSearch(grid, startNode, goalNode, backTrack) {
       const currentNode = openList.pop();
       closedList.set(`${currentNode.x},${currentNode.y}`, currentNode);
       animation.push([currentNode.x, currentNode.y]);
-  
+      discoveries.counter++;
       if (currentNode === goalNode) {
         let current = currentNode;
         while (current !== null) {
           backTrack.push([current.x, current.y]);
+          discoveries.path++;
           current = current.parent;
         }
         return animation;
@@ -122,11 +156,16 @@ function aStarSearch(grid, startNode, goalNode, backTrack) {
   
       const neighbors = [];
       const { x, y } = currentNode;
-  
-      if (x > 0) neighbors.push(grid[x - 1][y]);
-      if (x < grid.length - 1) neighbors.push(grid[x + 1][y]);
-      if (y > 0) neighbors.push(grid[x][y - 1]);
-      if (y < grid[0].length - 1) neighbors.push(grid[x][y + 1]);
+
+      
+      for(let i = 0 ;i < 4;i++){
+        let nx = x+dx[i];
+        let ny = y+dy[i];
+        if(nx>=0 && ny >=0 && nx < row && ny<col){
+            neighbors.push(grid[nx][ny]);
+        } 
+      }
+
   
       let hasValidNeighbor = false;
   
@@ -158,6 +197,7 @@ function aStarSearch(grid, startNode, goalNode, backTrack) {
       if (!hasValidNeighbor) {
         // Mark the current node as a dead end in the animation
         animation.push([currentNode.x, currentNode.y, true]);
+        discoveries.counter++;
       }
     }
   
@@ -165,6 +205,7 @@ function aStarSearch(grid, startNode, goalNode, backTrack) {
     for (let [key, node] of closedList.entries()) {
       if (!node.obstacle) {
         animation.push([node.x, node.y]);
+        discoveries.counter++;
       }
     }
   
@@ -202,12 +243,20 @@ const AStarHelper = (gridData) => {
     let yStart = gridData.source[0][1];
     let xEnd = gridData.target[0];
     let yEnd = gridData.target[1];
+    let walls = gridData.walls;
     let backtrack = []
-    const path = aStarSearch(grid, grid[xStart][yStart], grid[xEnd][yEnd],backtrack);
+    let discoveries = {
+        counter: 0,
+        path: 0
+      }
+    const path = aStarSearch(grid, grid[xStart][yStart], grid[xEnd][yEnd],backtrack,row,col,discoveries);
+    discoveries.counter = discoveries.counter-2;
+    let message = setMessage(discoveries,row,col,walls);
+    
     if (path !== null) {
-        return [path, backtrack];
+        return [path, backtrack,message];
     } else {
-        return [path,backtrack];
+        return [path,[],message];
     }
 
 };

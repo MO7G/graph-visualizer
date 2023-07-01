@@ -35,8 +35,13 @@ const createParent = (rows, cols) => {
 }
 
 
-const setMessage = (discoveries, row, col, walls) => {
-    let Name = "Dijkstra Single Shortest Path";
+const setMessage = (discoveries, row, col, walls,type) => {
+    let Name ;
+    if (type === "multi-dij"){
+        Name = "Multiple Source Dijkstra Shortest Path";
+    }else{
+        Name =  "Dijkstra Single Shortest Path";
+    }
     let complexity = "O(N*M Log(N*M))"
     let discovered = discoveries.counter;
     let TotalSize = row * col;
@@ -100,7 +105,7 @@ const DijHelper = (gridData, type) => {
        
     }
     constructShortestPath(multiSource[0][0], multiSource[0][1], xEnd, yEnd, parent, shortestPathArray,discoveries,grid);
-    let message = setMessage(discoveries, row, col, walls);
+    let message = setMessage(discoveries, row, col, walls,type);
     return [path, shortestPathArray,message ]
 
 

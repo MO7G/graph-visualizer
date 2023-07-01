@@ -31,12 +31,12 @@
   }
 
 .cell.wall{
-    background-color: #15db95 !important;
+    background-color: #4d4081 !important;
     transition: all 0.3s ease-in-out;
     animation: beat 0.3s  ;
 }
 .cell.source{
-    background-color: rgb(0, 0, 0) !important;
+    background-color: rgb(251, 255, 0) !important;
 }
 .cell.target{
     background-color: #7bff00  !important;
@@ -88,7 +88,8 @@ background-color: #d8ab89 !important;
     width: 100%;
     height: 100%;
     transition: background-color 2s;
-    color: rgb(21, 255, 0);
+
+    color: white
   }
   
   .grid-number p {
@@ -103,9 +104,7 @@ background-color: #d8ab89 !important;
 
 
 .cell.done{
-  background: linear-gradient(-425deg, #21945b 0%, #271383 13%, rgb(83, 56, 117) 100%);
-  animation: gradient 1s ease infinite;
-  background-size: 4200% 4200%;
+  background-color: #57991a !important;
    transition: all 1s;
 }
 

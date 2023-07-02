@@ -63,6 +63,13 @@ Maze Solver is a React-powered project that utilizes graph traversal algorithms 
 ![login](https://github.com/MO7G/graph-visualizer/blob/main/public/assets/screenshots/9.png?raw=true)
 ![login](https://github.com/MO7G/graph-visualizer/blob/main/public/assets/screenshots/10.png?raw=true)
 
+## Live Preview
+
+You can try out the Maze Solver application by accessing the live preview [here](https://your-live-preview-url).
+
+The live preview allows you to interact with the application and explore its features without the need to set up the project locally. Feel free to generate mazes, run different algorithms, and see them in action!
+Please note that the live preview may have some limitations compared to running the project locally, such as reduced performance or restricted functionality depending on the hosting platform.
+
 
 
 ## Run Locally

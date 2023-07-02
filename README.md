@@ -52,8 +52,17 @@ Maze Solver is a React-powered project that utilizes graph traversal algorithms 
 - **Maze Generator**: Users can generate mazes using recursive and random maze generators.
 
 ## Screenshots
+![login](https://github.com/MO7G/graph-visualizer/blob/main/public/assets/screenshots/1.png?raw=true)
+![login](https://github.com/MO7G/graph-visualizer/blob/main/public/assets/screenshots/2.png?raw=true)
+![login](https://github.com/MO7G/graph-visualizer/blob/main/public/assets/screenshots/3.png?raw=true)
+![login](https://github.com/MO7G/graph-visualizer/blob/main/public/assets/screenshots/4.png?raw=true)
+![login](https://github.com/MO7G/graph-visualizer/blob/main/public/assets/screenshots/5.png?raw=true)
+![login](https://github.com/MO7G/graph-visualizer/blob/main/public/assets/screenshots/6.png?raw=true)
+![login](https://github.com/MO7G/graph-visualizer/blob/main/public/assets/screenshots/7.png?raw=true)
+![login](https://github.com/MO7G/graph-visualizer/blob/main/public/assets/screenshots/8.png?raw=true)
+![login](https://github.com/MO7G/graph-visualizer/blob/main/public/assets/screenshots/9.png?raw=true)
+![login](https://github.com/MO7G/graph-visualizer/blob/main/public/assets/screenshots/10.png?raw=true)
 
-(Here you can add screenshots of your application. Make sure to capture the different modes, grid configurations, and algorithm outputs.)
 
 
 ## Run Locally

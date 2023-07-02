@@ -22,7 +22,6 @@ const Dashboard = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(event.target.elements)
     const row = event.target.elements.row.value;
     const column = event.target.elements.col.value;
 
@@ -37,14 +36,10 @@ const Dashboard = (props) => {
     props.onGridClear();
   }
 
- const dosomething = (event) =>{
-  console.log(event)
- }
 
  const handleLabelClick=  (event) =>{
     let ans = event.target.htmlFor;
     ans.toLowerCase();
-    console.log(ans);
     if(ans=='clear'){
       props.onHandleSetOption(clearRef.current.value,false)
     }else if(ans == 'source'){

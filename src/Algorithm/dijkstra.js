@@ -95,8 +95,6 @@ const DijHelper = (gridData, type) => {
 
     dij(multiSource, row, col, dis, grid, path, parent, type, vis,discoveries);
     let shortestPathArray = [];
-    console.log(multiSource[0]);
-    console.log(xEnd, yEnd)
     for (let i = 0; i < row; i++) {
         let rowString = '';
         for (let j = 0; j < col; j++) {
@@ -162,7 +160,6 @@ const dij = (multiSource, row, col, dis, grid, path, parent, type, vis,discoveri
         }
 
     }
-    // console.log(counter);
 }
 
 
@@ -175,7 +172,6 @@ const constructShortestPath = (xStart, yStart, xEnd, yEnd, parent, shortestPath,
         discoveries.path++;
         discoveries.cost = discoveries.cost + grid[currentX][currentY];
         let parents = parent[currentX][currentY];
-        console.log(currentX, currentY, "-:", parent[currentX][currentY])
         if (parents) {
             currentX = parents[0];
             currentY = parents[1];

@@ -259,7 +259,6 @@ function greedyBestFirstSearch(
     }
   }
 
-  console.log("Target not found!");
   return null;
 }
 

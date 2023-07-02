@@ -118,7 +118,6 @@ delay = 2
     } else if (buttonId === 'clearNumbers') {
       // Handle Negative Numbers button click
       clearNumbers();
-      console.log("from line 116");  
     }else if(buttonId == 'specialPattren'){
       let pattern = gridNumbersPatternHelper(props.row,props.col);
       setWeightAllowed(true);
@@ -601,7 +600,6 @@ delay = 2
           await delay(50);
           let animation = await BfsHelper(object);
           props.handleSetLogMessage(animation[2]);
-          console.log(animation[2])
           handleToastProcessing("", "destroy");
           handleToastProcessing("", "pathFinding")
           draw(animation);
@@ -616,7 +614,6 @@ delay = 2
           handleToastProcessing("dij", "processing")
           let object = handleGridDTS(props.row, props.col);
           await delay(50);
-          console.log(object)
           let animation = await DijHelper(object, "not-multiple-source");
           props.handleSetLogMessage(animation[2]);
           handleToastProcessing("", "destroy");
@@ -635,7 +632,6 @@ delay = 2
           await delay(50);
           let animation = await bellmanFordHelper(object);
           props.handleSetLogMessage(animation[2]);
-          console.log(animation);
           handleToastProcessing("", "destroy");
           handleToastProcessing("", "pathFinding")
           draw(animation);
@@ -651,7 +647,6 @@ delay = 2
           let object = handleGridDTS(props.row, props.col);
           await delay(50);
           let animation = await AStarHelper(object);
-          console.log(animation)
           props.handleSetLogMessage(animation[2]);
           toast.dismiss();
           if (animation[0] === null) {
@@ -702,7 +697,6 @@ delay = 2
         let object = handleGridDTS(props.row, props.col);
         await delay(50);
         let animation = await DijHelper(object, "multi-dij");
-        console.log(animation[2])
         props.handleSetLogMessage(animation[2]);
         handleToastProcessing("", "destroy");
         handleToastProcessing("", "pathFinding")

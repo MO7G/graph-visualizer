@@ -50,7 +50,6 @@ const HomePage = () => {
 
   const handleSizeSubmit = (newRow, newCol) => {
 
-    console.log("yes this is it ", gridRef);
     setRow(newRow);
     setCol(newCol);
   };
@@ -113,7 +112,6 @@ const HomePage = () => {
   };
 
   const hanldeSetSliderValue = (value) => {
-    console.log(value)
     setSliderValue(value);
   };
 

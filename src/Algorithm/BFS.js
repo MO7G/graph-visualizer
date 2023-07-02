@@ -49,7 +49,6 @@ const BfsHelper = (gridData, type) => {
     type,
     discoveries
   );
-  console.log(discoveries.counter);
   constructShortestPath(
     xStart,
     yStart,
@@ -139,7 +138,6 @@ const constructShortestPath = (
   shortestPath,
   discoveries
 ) => {
-  console.log(shortestPath);
   let currentX = xEnd;
   let currentY = yEnd;
   while (currentX !== xStart || currentY !== yStart) {

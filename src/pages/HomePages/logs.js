@@ -14,7 +14,6 @@ const Log = React.forwardRef((props, ref) => {
   const handleNewLog = (info) => {
     const newInfo = [];
     newInfo[0] = info;
-    console.log(info[0]);
     setInfo(prevInfo => [...prevInfo, ...newInfo]);
   };
 

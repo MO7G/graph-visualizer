@@ -133,11 +133,9 @@ const gridNumbersPatternHelper = (rows, cols) => {
       break;
 
     case 8:
-      // Generate grid with a certain pattern (example)
       for (let i = 0; i < rows; i++) {
         const row = [];
         for (let j = 0; j < cols; j++) {
-          // Apply your desired pattern logic here
           const number = getRandomNumber(0+i,i+j);
           row.push(number);
         }

@@ -36,10 +36,10 @@
     animation: beat 0.3s  ;
 }
 .cell.source{
-    background-color: rgb(251, 255, 0) !important;
+    background-color: rgb(255, 255, 255) !important;
 }
 .cell.target{
-    background-color: #7bff00  !important;
+    background-color: #00f7ff  !important;
 }
 
 .cell.visiting {

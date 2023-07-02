@@ -3,8 +3,7 @@ function getRandomNumber(min, max) {
 }
 const gridNumbersPatternHelper = (rows, cols) => {
   const grid = [];
-//   const rand = getRandomNumber(0, 8);
-   let rand = 6;
+   const rand = getRandomNumber(0, 8);
   switch (rand) {
     case 0:
       // Left Side = large numbers ,,,,, Right Side = Small Numbers

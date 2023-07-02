@@ -10,7 +10,7 @@ import AStarHelper from '../../Algorithm/Astar';
 import mazeBacktrackingHelper from '../../Algorithm/recursiveMazeGenerator';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import gridNumbersPatternHelper from '../../Algorithm/gridNumberPatterns';
 
 const Grid = React.forwardRef((props, ref) => {
   const [mouseClicked, setMouseClicked] = useState(false);
@@ -118,8 +118,13 @@ delay = 2
     } else if (buttonId === 'clearNumbers') {
       // Handle Negative Numbers button click
       clearNumbers();
-      console.log("from line 116");    }
-  };
+      console.log("from line 116");  
+    }else if(buttonId == 'specialPattren'){
+      let pattern = gridNumbersPatternHelper(props.row,props.col);
+      setWeightAllowed(true);
+      setGridNumbers(pattern);
+    }
+  }
 
   const doWork = () => {
     for (let i = 0; i < 3000000000; i++) {
@@ -611,6 +616,7 @@ delay = 2
           handleToastProcessing("dij", "processing")
           let object = handleGridDTS(props.row, props.col);
           await delay(50);
+          console.log(object)
           let animation = await DijHelper(object, "not-multiple-source");
           props.handleSetLogMessage(animation[2]);
           handleToastProcessing("", "destroy");

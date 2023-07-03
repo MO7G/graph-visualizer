@@ -11,6 +11,7 @@ import mazeBacktrackingHelper from '../../Algorithm/recursiveMazeGenerator';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import gridNumbersPatternHelper from '../../Algorithm/gridNumberPatterns';
+import { prototype } from 'fastpriorityqueue';
 
 const Grid = React.forwardRef((props, ref) => {
   const [mouseClicked, setMouseClicked] = useState(false);
@@ -817,7 +818,9 @@ delay = 2
               width: `${props.onCellDim}em`,
               height: `${props.onCellDim}em`,
               backgroundColor: 'white',
-              border: "0.1px solid black"
+              border: "0.1px solid black",
+              border: props.onSolid ? `#44318d 1px solid` : `#44318d 0px solid`,
+              backgroundColor: props.onSolid ? `#1a1a1d` : `#2f2f3315`
             }}
             data-row={i.toString()}
             data-col={j.toString()}

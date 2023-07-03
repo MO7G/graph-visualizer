@@ -251,6 +251,8 @@ const Dashboard = (props) => {
           <button id="specialPattren" className={props.onIsProcessing ? 'disabled-button' : ''} disabled={props.onIsProcessing} onClick={props.onHandleOrder}>Special Grid Pattern</button>
           <button id="clearNumbers" className={props.onIsProcessing ? 'disabled-button' : ''} disabled={props.onIsProcessing}onClick={props.onHandleOrder}>Clear Numbers</button>
           <button id='modeButton' className={props.onIsProcessing ? 'disabled-button' : ''} disabled={props.onIsProcessing} onClick={props.onHandleSetMode}>{props.onMode ? 'Show Mode' : 'Educationl Mode'}</button>
+          <button id='solidButton' onClick={props.onHandleSolid}>{props.onSolid ? 'Disable Boarder' : 'Activate Boarder'}</button>
+
         </div>
       </div>
 

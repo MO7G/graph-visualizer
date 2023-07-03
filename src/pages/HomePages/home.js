@@ -33,7 +33,13 @@ const HomePage = () => {
   const [maxRow,setMaxRow] = useState(100);
   const [maxCol ,setMaxCol] = useState(100)
   const [isProcessing, setIsProcessing] = useState(false);
+  const [solid,setSolid] = useState(true);
 
+
+
+  const handleSolid =(event)=>{
+    setSolid(!solid);
+  }
 
   const startProcess = () => {
     setIsProcessing(true);
@@ -138,8 +144,8 @@ const HomePage = () => {
             </div>
           </div>
           <ToastContainer />
-          <Dashboard onIsProcessing={isProcessing} onHandleSetMode={onHandleSetMode} onMode={mode} onSliderValue={sliderValue} onSetSliderValue={hanldeSetSliderValue} onSetMulti={handleSetMulti} onHandleOrder={handleOrder} onRow={row} onCol={col} onSetRow={setRow} onSetCol={setCol} onOption={option} onHandleSetOption={handleSetOption} onSizeSubmit={handleSizeSubmit} handleSetAlgorithm={handleSetAlgorithm} algorithm={algorithm} />
-          <Grid onMode={mode} onSetIsProcessing={setIsProcessing} onWeightedSize={weightSize} onCellDim={cellDim} handleSetLogMessage={setLogMessage} onSliderValue={sliderValue} ref={gridRef} onMulti={multi} row={row} col={col} onOption={option} onAlgorithm={algorithm} />
+          <Dashboard onSolid={solid} onHandleSolid={handleSolid} onIsProcessing={isProcessing} onHandleSetMode={onHandleSetMode} onMode={mode} onSliderValue={sliderValue} onSetSliderValue={hanldeSetSliderValue} onSetMulti={handleSetMulti} onHandleOrder={handleOrder} onRow={row} onCol={col} onSetRow={setRow} onSetCol={setCol} onOption={option} onHandleSetOption={handleSetOption} onSizeSubmit={handleSizeSubmit} handleSetAlgorithm={handleSetAlgorithm} algorithm={algorithm} />
+          <Grid onSolid={solid} onMode={mode} onSetIsProcessing={setIsProcessing} onWeightedSize={weightSize} onCellDim={cellDim} handleSetLogMessage={setLogMessage} onSliderValue={sliderValue} ref={gridRef} onMulti={multi} row={row} col={col} onOption={option} onAlgorithm={algorithm} />
           <Log key={key} ref={logRef} onLogMessage={logMessage}></Log>
           <div className='size' style={{ height: '1000px ' }}></div>
 

@@ -18,13 +18,8 @@
   justify-content: center;
   font-family: 'Arial', sans-serif;
   font-size: 1.5em;
-  border:   #44318d 1px solid    !important;
   width: 50px; /* Adjust the width as per your requirements */
-  height: 50px; /* Adjust the height as per your requirements */
-  background-color: #1a1a1d !important;
-  
-
-  
+  height: 50px; /* Adjust the height as per your requirements */  
 }
 .cell:hover{
     background-color: #b62385 !important;

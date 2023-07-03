@@ -19,7 +19,7 @@
   font-family: 'Arial', sans-serif;
   font-size: 1.5em;
   width: 50px; /* Adjust the width as per your requirements */
-  height: 50px; /* Adjust the height as per your requirements */  
+  height: 50px ; /* Adjust the height as per your requirements */  
 }
 .cell:hover{
     background-color: #b62385 !important;
